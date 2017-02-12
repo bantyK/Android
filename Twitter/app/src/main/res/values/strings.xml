@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Twitter</string>
+    <string name="scheme">tnice-android</string>
+    <string name="API_KEY">tjQNmFNzssv7PJpsQmqEN65bi</string>
+    <string name="SECRET_KEY">wNvUDvWYH0uGPxK32ta8xcThE8NS4GzrjAsbYHa82yjvt3l3WK</string>
+</resources>
