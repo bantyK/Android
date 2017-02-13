@@ -1,6 +1,6 @@
 package com.example.admin.movies;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -17,10 +17,20 @@ import java.net.URL;
  * Created by Banty on 2/13/2017.
  */
 
-public class MovieDetailsDownloadTask extends AsyncTask<URL,Void,String> {
+public class MovieDetailsDownloadTask extends AsyncTask<URL, Void, String> {
     private static final String TAG = MovieDetailsDownloadTask.class.getSimpleName();
     private Context mContext;
     private DownloadTaskCompletedListener taskCompletedListener;
+    private ProgressDialog progressDialog;
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialog = new ProgressDialog(mContext);
+        progressDialog.setMessage("Downloading content");
+        progressDialog.show();
+
+    }
 
     public MovieDetailsDownloadTask(Context mContext, DownloadTaskCompletedListener listener) {
         this.mContext = mContext;
@@ -33,12 +43,12 @@ public class MovieDetailsDownloadTask extends AsyncTask<URL,Void,String> {
         URL targetURL = urls[0];
         String responseLine = null;
         StringBuilder stringBuilder = new StringBuilder();
-        if(targetURL != null){
+        if (targetURL != null) {
             try {
                 HttpURLConnection httpURLConnection = (HttpURLConnection) targetURL.openConnection();
                 httpURLConnection.setRequestMethod("GET");
                 int responseCode = httpURLConnection.getResponseCode();
-                if(responseCode == 200) {
+                if (responseCode == 200) {
                     InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                     while ((responseLine = reader.readLine()) != null) {
@@ -58,6 +68,8 @@ public class MovieDetailsDownloadTask extends AsyncTask<URL,Void,String> {
     @Override
     protected void onPostExecute(String responseJson) {
         super.onPostExecute(responseJson);
+        if (progressDialog.isShowing())
+            progressDialog.cancel();
         Log.i(TAG, "onPostExecute: json response = " + responseJson);
         taskCompletedListener.onTaskCompleted(responseJson);
     }
