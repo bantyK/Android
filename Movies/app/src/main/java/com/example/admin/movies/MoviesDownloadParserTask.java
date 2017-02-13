@@ -12,13 +12,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Created by Banty on 2/13/2017.
  */
 
-public class MovieDetailsDownloadTask extends AsyncTask<URL, Void, String> {
-    private static final String TAG = MovieDetailsDownloadTask.class.getSimpleName();
+public class MoviesDownloadParserTask extends AsyncTask<URL, Void, String> {
+    private static final String TAG = MoviesDownloadParserTask.class.getSimpleName();
     private Context mContext;
     private DownloadTaskCompletedListener taskCompletedListener;
     private ProgressDialog progressDialog;
@@ -32,7 +33,7 @@ public class MovieDetailsDownloadTask extends AsyncTask<URL, Void, String> {
 
     }
 
-    public MovieDetailsDownloadTask(Context mContext, DownloadTaskCompletedListener listener) {
+    public MoviesDownloadParserTask(Context mContext, DownloadTaskCompletedListener listener) {
         this.mContext = mContext;
         this.taskCompletedListener = (DownloadTaskCompletedListener) listener;
     }
@@ -68,9 +69,15 @@ public class MovieDetailsDownloadTask extends AsyncTask<URL, Void, String> {
     @Override
     protected void onPostExecute(String responseJson) {
         super.onPostExecute(responseJson);
-        if (progressDialog.isShowing())
-            progressDialog.cancel();
         Log.i(TAG, "onPostExecute: json response = " + responseJson);
-        taskCompletedListener.onTaskCompleted(responseJson);
+
+        //call the parser class to get the movies arraylist
+        ArrayList<Movie> movies = new JsonParser(responseJson).parse();
+
+        if (progressDialog.isShowing()) {
+            progressDialog.cancel();
+        }
+        //notify mainActivity with the arraylist when task completed
+        taskCompletedListener.onTaskCompleted(movies);
     }
 }

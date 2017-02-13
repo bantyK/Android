@@ -16,7 +16,8 @@ public class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
     public static final String BASE_URL = "api.themoviedb.org";
     public static final String API_KEY = "b33cef0e8f9a26e8857366681a641e25";
-    public static URL formQueryURL(String movieName){
+
+    public URL formQueryURL(String movieName){
         Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.scheme("https")
                 .authority(BASE_URL)

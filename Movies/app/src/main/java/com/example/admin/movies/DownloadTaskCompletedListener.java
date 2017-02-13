@@ -1,5 +1,7 @@
 package com.example.admin.movies;
 
+import java.util.ArrayList;
+
 public interface DownloadTaskCompletedListener {
-    void onTaskCompleted(String s);
+    void onTaskCompleted(ArrayList<Movie> movies);
 }
