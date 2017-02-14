@@ -9,15 +9,15 @@ package com.example.admin.movies;
 public class Movie {
     private int id;
     private String title;
-    private String overview;
+    private String releaseDate;
     private String thumbUrl;
     private double rating;
     private boolean isAdult;
 
-    public Movie(int id, String title, String overview, String thumbUrl, double rating, boolean isAdult) {
+    public Movie(int id, String title, String releaseDate, String thumbUrl, double rating, boolean isAdult) {
         this.id = id;
         this.title = title;
-        this.overview = overview;
+        this.releaseDate = releaseDate;
         this.thumbUrl = thumbUrl;
         this.rating = rating;
         this.isAdult = isAdult;
@@ -43,7 +43,7 @@ public class Movie {
         return isAdult;
     }
 
-    public String getOverview() {
-        return overview;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 }

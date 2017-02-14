@@ -17,7 +17,7 @@ public class JsonParser {
     private Movie movie;
     private int id;
     private String title;
-    private String overview;
+    private String releaseDate;
     private String thumbUrl;
     private Double rating;
     private boolean isAdult;
@@ -36,12 +36,12 @@ public class JsonParser {
                 singleMovieJson = moviesArray.getJSONObject(index);
                 id = singleMovieJson.getInt("id");
                 title = singleMovieJson.getString("title");
-                overview = singleMovieJson.getString("overview");
+                releaseDate = singleMovieJson.getString("release_date");
                 thumbUrl = singleMovieJson.getString("poster_path");
                 rating = singleMovieJson.getDouble("vote_average");
                 isAdult = singleMovieJson.getBoolean("adult");
 
-                movie = new Movie(id, title, overview, thumbUrl, rating, isAdult);
+                movie = new Movie(id, title, releaseDate,thumbUrl, rating, isAdult);
                 movies.add(movie);
             }
         } catch (JSONException e) {

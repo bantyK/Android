@@ -7,6 +7,7 @@ package com.example.admin.movies;
  */
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
+    private static final String TAG = RecyclerViewAdapter.class.getSimpleName();
     private Context mContext;
     private ArrayList<Movie> movieList;
 
@@ -38,6 +40,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Movie currentMovie = movieList.get(position);
 
         holder.movieTitleTextView.setText(currentMovie.getTitle());
+        holder.releaseDateTextView.setText("(" + currentMovie.getReleaseDate().split("-")[0] + ")");
     }
 
     @Override
@@ -47,11 +50,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView movieTitleTextView;
+        public TextView releaseDateTextView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             movieTitleTextView = (TextView) itemView.findViewById(R.id.tv_movie_title);
+            releaseDateTextView = (TextView) itemView.findViewById(R.id.tv_release_date);
         }
     }
 }
