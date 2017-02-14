@@ -19,6 +19,8 @@ import java.util.ArrayList;
 
 /**
  * Created by Banty on 2/13/2017.
+ *
+ * Starts a background process for downloading and parsing the json from the api
  */
 
 public class MoviesDownloadParserTask extends AsyncTask<URL, Void, String> {
@@ -36,7 +38,7 @@ public class MoviesDownloadParserTask extends AsyncTask<URL, Void, String> {
     protected void onPreExecute() {
         super.onPreExecute();
         progressDialog = new ProgressDialog(mContext);
-        progressDialog.setMessage("Downloading content");
+        progressDialog.setMessage(mContext.getString(R.string.getting_movie_list));
         progressDialog.show();
 
     }

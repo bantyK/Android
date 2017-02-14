@@ -3,7 +3,7 @@ package com.example.admin.movies;
 /**
  * Created by Banty on 2/13/2017.
  * <p>
- * This is a POJO to represent a movie.
+ * This is a simple POJO to represent a movie.
  */
 
 public class Movie {

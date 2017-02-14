@@ -1,5 +1,10 @@
 package com.example.admin.movies;
 
+/**
+ * Created by Banty on 2/14/2017.
+ *
+ * Stores the CONSTANTS required for making http calls and url formations
+ */
 public class HttpConstants {
 
     public final static String API_VERSION = "3";

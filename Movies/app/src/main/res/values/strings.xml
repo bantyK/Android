@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Movies</string>
     <string name="enter_movie_name">Enter the movie name</string>
+    <string name="getting_movie_list">Getting the movie list for you</string>
 </resources>

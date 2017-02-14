@@ -9,6 +9,8 @@ import java.net.URL;
 
 /**
  * Created by Banty on 2/13/2017.
+ *
+ * Build URLs for network calls and other http tasks.
  */
 
 public class NetworkUtils {

@@ -1,5 +1,9 @@
 package com.example.admin.movies;
-
+/**
+ * Created by Banty on 2/13/2017.
+ *
+ * Launcher Activity
+ */
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;

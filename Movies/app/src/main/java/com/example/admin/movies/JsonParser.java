@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by Banty on 2/13/2017.
  * <p>
- * Parse the response json and creates a movie arraylist containing movie details
+ * Parse the response json and creates a movie Arraylist containing movie details
  */
 
 public class JsonParser {
