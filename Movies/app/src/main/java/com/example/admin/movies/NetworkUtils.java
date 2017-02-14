@@ -13,32 +13,53 @@ import java.net.URL;
 
 public class NetworkUtils {
 
-    private static final String TAG = NetworkUtils.class.getSimpleName();
     public static final String BASE_URL = "api.themoviedb.org";
     public static final String API_KEY = "b33cef0e8f9a26e8857366681a641e25";
+    private static final String TAG = NetworkUtils.class.getSimpleName();
+    private URL targetUrl;
 
-    public URL formQueryURL(String movieName){
+    public URL buildMoviesListURL(String movieName) {
         Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.scheme("https")
                 .authority(BASE_URL)
-                .appendPath("3")
-                .appendPath("search")
-                .appendPath("movie")
-                .appendQueryParameter("api_key",API_KEY)
-                .appendQueryParameter("query",movieName);
+                .appendPath(HttpConstants.API_VERSION)
+                .appendPath(HttpConstants.PATH_SEARCH)
+                .appendPath(HttpConstants.PATH_MOVIE)
+                .appendQueryParameter(HttpConstants.QUERY_API_KEY, API_KEY)
+                .appendQueryParameter(HttpConstants.QUERY_QUERYPARAM, movieName);
 
         String targetUrlString = uriBuilder.build().toString();
-        Log.i(TAG, "formQueryURL: Movie URL : " + targetUrlString);
+        Log.i(TAG, "buildMoviesListURL: Movie URL : " + targetUrlString);
 
-        URL targetUrl = null;
-
-        try{
+        try {
             targetUrl = new URL(targetUrlString);
         } catch (MalformedURLException e) {
+            Log.d(TAG, "buildSingleMovieDetailURL: Exception while creating movie list URL");
             e.printStackTrace();
         }
         return targetUrl;
+    }
 
+    public URL buildSingleMovieDetailURL(String movieId) {
 
+        Uri.Builder uriBuilder = new Uri.Builder();
+        uriBuilder.scheme("https")
+                .authority(BASE_URL)
+                .appendPath(HttpConstants.API_VERSION)
+                .appendPath(HttpConstants.PATH_MOVIE)
+                .appendPath(movieId)
+                .appendQueryParameter(HttpConstants.QUERY_API_KEY, API_KEY)
+                .appendQueryParameter(HttpConstants.QUERY_LANGUAGE, "en-US");
+
+        String urlString = uriBuilder.build().toString();
+        Log.i(TAG, "buildSingleMovieDetailURL: Movie detail URl : " + urlString);
+
+        try{
+            targetUrl = new URL(urlString);
+        } catch (MalformedURLException e) {
+            Log.d(TAG, "buildSingleMovieDetailURL: Exception while creating movie detail URL");
+            e.printStackTrace();
+        }
+        return targetUrl;
     }
 }

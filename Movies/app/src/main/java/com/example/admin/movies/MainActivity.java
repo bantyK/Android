@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements DownloadTaskCompl
 
         //initiate the network utils class and building the target URL
         networkUtils = new NetworkUtils();
-        URL targetURL = networkUtils.formQueryURL(movieName);
+        URL targetURL = networkUtils.buildMoviesListURL(movieName);
 
         //start the async task for downloading the json from movies api
         MoviesDownloadParserTask downloadTask = new MoviesDownloadParserTask(MainActivity.this, this);
