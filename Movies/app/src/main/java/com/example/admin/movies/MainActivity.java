@@ -55,13 +55,22 @@ public class MainActivity extends AppCompatActivity implements DownloadTaskCompl
         Log.d(TAG, "onTaskCompleted: download task completed : " + jsonResponse);
 
         //getting the arraylist of movies from the json received
-        ArrayList<Movie> movies = jsonParser.parseMovieList(jsonResponse);
+        final ArrayList<Movie> movies = jsonParser.parseMovieList(jsonResponse);
 
         //setting the recycler view
         layoutManager = new LinearLayoutManager(MainActivity.this);
         adapter = new RecyclerViewAdapter(MainActivity.this,movies);
         movieListRecyclerView.setLayoutManager(layoutManager);
         movieListRecyclerView.setAdapter(adapter);
+
+        movieListRecyclerView.addOnItemTouchListener(
+                new RecyclerViewClickListener(MainActivity.this, new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Log.d(TAG, "onItemClick: " + movies.get(position).getTitle());
+                    }
+                })
+        );
     }
 
     @Override
