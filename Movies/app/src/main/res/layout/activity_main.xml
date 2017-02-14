@@ -33,8 +33,7 @@
         android:id="@+id/rv_movie_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btn_find_movie"
-        android:visibility="gone" />
+        android:layout_below="@id/btn_find_movie" />
 
 
 </RelativeLayout>
