@@ -13,4 +13,5 @@ public class HttpConstants {
     public static final String QUERY_API_KEY = "api_key";
     public static final String QUERY_QUERYPARAM = "query";
     public static final String QUERY_LANGUAGE = "language";
+    public static final String PATH_CONFIGURATION = "configuration";
 }

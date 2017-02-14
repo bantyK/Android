@@ -22,11 +22,11 @@ public class JsonParser {
     private Double rating;
     private boolean isAdult;
 
-    public JsonParser(String jsonString) {
-        this.jsonString = jsonString;
+    public JsonParser() {
+
     }
 
-    public ArrayList<Movie> parse() {
+    public ArrayList<Movie> parseMovieList(String jsonString) {
         ArrayList<Movie> movies = new ArrayList<>();
         JSONObject singleMovieJson;
         try {
@@ -48,5 +48,27 @@ public class JsonParser {
             e.printStackTrace();
         }
         return movies;
+    }
+
+    public Configuration getCongigParam(String jsonString) {
+        String baseUrl = null, secureBaseUrl = null;
+        ArrayList<String> imageSize = new ArrayList<>();
+
+        try {
+            JSONObject rootObject = new JSONObject(jsonString);
+            JSONObject imageObject = rootObject.getJSONObject("images");
+
+            baseUrl = imageObject.getString("base_url");
+            secureBaseUrl = imageObject.getString("secure_base_url");
+            JSONArray sizeArray = imageObject.getJSONArray("backdrop_sizes");
+
+            for (int i = 0; i < sizeArray.length(); i++) {
+                imageSize.add(sizeArray.getString(i));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new Configuration(baseUrl, secureBaseUrl, imageSize);
+
     }
 }

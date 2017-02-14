@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements DownloadTaskCompl
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private NetworkUtils networkUtils;
+    private JsonParser jsonParser;
     private ArrayList<Movie> movieList;
 
     //UI elements
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements DownloadTaskCompl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        jsonParser = new JsonParser();
+
         //find the references of the UI elements
         movieNameEditText = (EditText) findViewById(R.id.et_movie_name);
         findMovieButton = (Button) findViewById(R.id.btn_find_movie);
@@ -48,8 +51,13 @@ public class MainActivity extends AppCompatActivity implements DownloadTaskCompl
     }
 
     @Override
-    public void onTaskCompleted(ArrayList<Movie> movies) {
-        Log.d(TAG, "onTaskCompleted: download task completed : " + movies.get(0).getTitle());
+    public void onTaskCompleted(String jsonResponse) {
+        Log.d(TAG, "onTaskCompleted: download task completed : " + jsonResponse);
+
+        //getting the arraylist of movies from the json received
+        ArrayList<Movie> movies = jsonParser.parseMovieList(jsonResponse);
+
+        //setting the recycler view
         layoutManager = new LinearLayoutManager(MainActivity.this);
         adapter = new RecyclerViewAdapter(MainActivity.this,movies);
         movieListRecyclerView.setLayoutManager(layoutManager);
@@ -58,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements DownloadTaskCompl
 
     @Override
     public void onClick(View v) {
-        //find the movie name that the user entered from the edittext
+        //find the movie name that the user entered from the EditText
         movieName = movieNameEditText.getText().toString();
 
         //initiate the network utils class and building the target URL
@@ -66,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements DownloadTaskCompl
         URL targetURL = networkUtils.buildMoviesListURL(movieName);
 
         //start the async task for downloading the json from movies api
-        MoviesDownloadParserTask downloadTask = new MoviesDownloadParserTask(MainActivity.this, this);
+        DownloaderTask downloadTask = new DownloaderTask(MainActivity.this, this);
         downloadTask.execute(targetURL);
     }
 }
