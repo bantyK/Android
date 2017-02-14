@@ -1,5 +1,10 @@
 package com.example.admin.movies;
 
+/**
+ * Created by Banty on 2/13/2017.
+ *
+ * Adapter class for the recycler view
+ */
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
