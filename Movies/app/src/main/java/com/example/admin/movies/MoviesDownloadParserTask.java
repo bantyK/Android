@@ -3,7 +3,10 @@ package com.example.admin.movies;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -24,6 +27,11 @@ public class MoviesDownloadParserTask extends AsyncTask<URL, Void, String> {
     private DownloadTaskCompletedListener taskCompletedListener;
     private ProgressDialog progressDialog;
 
+    public MoviesDownloadParserTask(Context mContext, DownloadTaskCompletedListener listener) {
+        this.mContext = mContext;
+        this.taskCompletedListener = (DownloadTaskCompletedListener) listener;
+    }
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -32,12 +40,6 @@ public class MoviesDownloadParserTask extends AsyncTask<URL, Void, String> {
         progressDialog.show();
 
     }
-
-    public MoviesDownloadParserTask(Context mContext, DownloadTaskCompletedListener listener) {
-        this.mContext = mContext;
-        this.taskCompletedListener = (DownloadTaskCompletedListener) listener;
-    }
-
 
     @Override
     protected String doInBackground(URL... urls) {
