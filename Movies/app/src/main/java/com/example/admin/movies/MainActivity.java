@@ -1,9 +1,11 @@
 package com.example.admin.movies;
 /**
  * Created by Banty on 2/13/2017.
- *
+ * <p>
  * Launcher Activity
  */
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -55,11 +57,11 @@ public class MainActivity extends AppCompatActivity implements DownloadTaskCompl
         Log.d(TAG, "onTaskCompleted: download task completed : " + jsonResponse);
 
         //getting the arraylist of movies from the json received
-        final ArrayList<Movie> movies = jsonParser.parseMovieList(jsonResponse);
+        movieList = jsonParser.parseMovieList(jsonResponse);
 
         //setting the recycler view
         layoutManager = new LinearLayoutManager(MainActivity.this);
-        adapter = new RecyclerViewAdapter(MainActivity.this,movies);
+        adapter = new RecyclerViewAdapter(MainActivity.this, movieList);
         movieListRecyclerView.setLayoutManager(layoutManager);
         movieListRecyclerView.setAdapter(adapter);
 
@@ -67,7 +69,9 @@ public class MainActivity extends AppCompatActivity implements DownloadTaskCompl
                 new RecyclerViewClickListener(MainActivity.this, new OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Log.d(TAG, "onItemClick: " + movies.get(position).getTitle());
+                        Intent movieDetailIntent = new Intent(MainActivity.this, MovieDetailActivity.class);
+                        movieDetailIntent.putExtra(IntentExtras.MOVIE_ID, movieList.get(position).getId());
+                        MainActivity.this.startActivity(movieDetailIntent);
                     }
                 })
         );

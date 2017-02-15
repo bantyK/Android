@@ -41,7 +41,7 @@ public class JsonParser {
                 rating = singleMovieJson.getDouble("vote_average");
                 isAdult = singleMovieJson.getBoolean("adult");
 
-                movie = new Movie(id, title, releaseDate,thumbUrl, rating, isAdult);
+                movie = new Movie(id, title, releaseDate, thumbUrl, rating, isAdult);
                 movies.add(movie);
             }
         } catch (JSONException e) {
@@ -70,5 +70,69 @@ public class JsonParser {
         }
         return new Configuration(baseUrl, secureBaseUrl, imageSize);
 
+    }
+
+    public MovieDetail parseMovieDetails(String jsonResponse) {
+        String title = null;
+        String tagline = null;
+        boolean isAdult = false;
+        String budget = null;
+        ArrayList<String> genres = null; // one movie can belong to more than one genre eg. Action and Adventure
+        String imdbId = null;
+        String overview = null;
+        ArrayList<String> productionCompanies = null;
+        String revenue = null;
+        int runtime = 0;
+        Double averageRating = null;
+        String posterPath = null;
+        try {
+            JSONObject rootObject = new JSONObject(jsonResponse);
+
+            if (rootObject.getString("original_title") != null)
+                title = rootObject.getString("original_title");
+            if (rootObject.getString("tagline") != null)
+                tagline = rootObject.getString("tagline");
+            isAdult = rootObject.getBoolean("adult");
+            if (rootObject.getString("budget") != null)
+                budget = String.valueOf(rootObject.get("budget"));
+            if (rootObject.getJSONArray("genres") != null) {
+                JSONArray genreArray = rootObject.getJSONArray("genres");
+                genres = new ArrayList<>();
+                for (int i = 0; i < genreArray.length(); i++) {
+                    String genre = genreArray.getJSONObject(i).getString("name");
+                    genres.add(genre);
+                }
+            }
+            if (rootObject.getString("imdb_id") != null)
+                imdbId = rootObject.getString("imdb_id");
+            if (rootObject.getString("overview") != null)
+                overview = rootObject.getString("overview");
+
+            if (rootObject.getString("poster_path") != null)
+                posterPath = rootObject.getString("poster_path");
+
+            if (rootObject.getJSONArray("production_companies") != null) {
+                productionCompanies = new ArrayList<>();
+                JSONArray productionCompaniesArray = rootObject.getJSONArray("production_companies");
+                for (int i = 0; i < productionCompaniesArray.length(); i++) {
+                    String productionCompany = productionCompaniesArray.getJSONObject(i).getString("name");
+                    productionCompanies.add(productionCompany);
+                }
+            }
+
+            if (rootObject.get("revenue") != null)
+                revenue = String.valueOf(rootObject.get("revenue"));
+
+            runtime = rootObject.getInt("runtime");
+
+            rating = rootObject.getDouble("vote_average");
+
+            new MovieDetail(title, tagline, isAdult, budget, genres, imdbId, overview, productionCompanies, revenue, runtime, rating, posterPath);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
