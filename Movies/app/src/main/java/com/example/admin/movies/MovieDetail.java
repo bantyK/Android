@@ -1,5 +1,7 @@
 package com.example.admin.movies;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -21,6 +23,7 @@ public class MovieDetail {
     private String posterPath;
 
     public MovieDetail(String title, String tagline, boolean isAdult, String budget, ArrayList<String> genres, String imdbId, String overview, ArrayList<String> productionCompanies, String revenue, int runtime, Double averageRating, String posterPath) {
+        Log.d("Banty", "MovieDetail: " + title);
         this.title = title;
         this.tagline = tagline;
         this.isAdult = isAdult;
@@ -86,21 +89,4 @@ public class MovieDetail {
         return posterPath;
     }
 
-    @Override
-    public String toString() {
-        return "MovieDetail{" +
-                "title='" + title + '\'' +
-                ", tagline='" + tagline + '\'' +
-                ", isAdult=" + isAdult +
-                ", budget='" + budget + '\'' +
-                ", genres=" + genres +
-                ", imdbId='" + imdbId + '\'' +
-                ", overview='" + overview + '\'' +
-                ", productionCompanies=" + productionCompanies +
-                ", revenue='" + revenue + '\'' +
-                ", runtime=" + runtime +
-                ", averageRating=" + averageRating +
-                ", posterPath='" + posterPath + '\'' +
-                '}';
-    }
 }

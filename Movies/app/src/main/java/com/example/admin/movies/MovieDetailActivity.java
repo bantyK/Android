@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.net.URL;
@@ -16,14 +17,17 @@ import java.net.URL;
 public class MovieDetailActivity extends AppCompatActivity implements DownloadTaskCompletedListener{
     private final static String TAG = MovieDetailActivity.class.getSimpleName();
     private TextView movieTitleTextView;
+    private ImageView movieThumbImageView;
     private int movieId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: created");
         setContentView(R.layout.movie_detail_activity);
 
         movieTitleTextView = (TextView) findViewById(R.id.tv_movie_detail_title);
+        movieThumbImageView = (ImageView) findViewById(R.id.iv_movie_detail_thumb);
         Intent intent = getIntent();
         if(intent != null && intent.hasExtra(IntentExtras.MOVIE_ID)){
             movieId = intent.getExtras().getInt(IntentExtras.MOVIE_ID);
@@ -37,6 +41,10 @@ public class MovieDetailActivity extends AppCompatActivity implements DownloadTa
     public void onTaskCompleted(String jsonResponse) {
         JsonParser jsonParser = new JsonParser();
         MovieDetail movieDetail = jsonParser.parseMovieDetails(jsonResponse);
-        movieTitleTextView.setText(movieDetail.toString());
+        // TODO: 16/02/17 check for null movieDetail object while populating UI
+        movieTitleTextView.setText(movieDetail.getTitle());
+        URL thumbURL = new NetworkUtils().buildThumbURL(MovieSingleton.getInstance().getConfig(), movieDetail.getPosterPath());
+        ImageLoader.loadImageWithGlide(this, thumbURL.toString(), movieThumbImageView);
+
     }
 }

@@ -1,0 +1,27 @@
+package com.example.admin.movies;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+public class SplashActivity extends AppCompatActivity implements DownloadTaskCompletedListener {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
+        new DownloaderTask(this, this).execute(new NetworkUtils().buildConfigurationURL());
+
+    }
+
+    @Override
+    public void onTaskCompleted(String jsonResponse) {
+        JsonParser jsonParser = new JsonParser();
+        MovieSingleton.getInstance().setConfig(jsonParser.getCongigParam(jsonResponse));
+
+        //After getting the config details, start the MainActivity
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+}

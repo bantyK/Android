@@ -127,7 +127,7 @@ public class JsonParser {
 
             rating = rootObject.getDouble("vote_average");
 
-            new MovieDetail(title, tagline, isAdult, budget, genres, imdbId, overview, productionCompanies, revenue, runtime, rating, posterPath);
+            return new MovieDetail(title, tagline, isAdult, budget, genres, imdbId, overview, productionCompanies, revenue, runtime, rating, posterPath);
 
         } catch (JSONException e) {
             e.printStackTrace();

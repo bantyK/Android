@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements DownloadTaskCompl
 
         //register the onClick listener of the button
         findMovieButton.setOnClickListener(this);
-
     }
 
     @Override
