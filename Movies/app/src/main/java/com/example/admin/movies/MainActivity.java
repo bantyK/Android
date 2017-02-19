@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity implements DownloadTaskCompl
 
         //getting the arraylist of movies from the json received
         movieList = jsonParser.parseMovieList(jsonResponse);
-        adapter = new RecyclerViewAdapter(MainActivity.this, movieList);
         if (movieList.size() > 0) {
             //setting the recycler view
             layoutManager = new LinearLayoutManager(MainActivity.this);
+            adapter = new RecyclerViewAdapter(MainActivity.this, movieList);
             movieListRecyclerView.setLayoutManager(layoutManager);
             movieListRecyclerView.setAdapter(adapter);
             movieListRecyclerView.addOnItemTouchListener(
