@@ -3,4 +3,7 @@
     <string name="enter_movie_name">Enter the movie name</string>
     <string name="getting_movie_list">Please wait....</string>
     <string name="movie_detail_activity">Movie Detail Activity</string>
+    <string name="expandable_list_header_genre">Genre</string>
+    <string name="expandable_list_header_prod_companies">Production Companies</string>
+    <string name="not_available">NA</string>
 </resources>

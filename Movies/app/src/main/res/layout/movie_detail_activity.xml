@@ -1,16 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/tv_movie_detail_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_movie_detail_certificate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tv_movie_detail_title"
+        android:layout_alignParentRight="true"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
     <ImageView
-        android:layout_below="@id/tv_movie_detail_title"
         android:id="@+id/iv_movie_detail_thumb"
-        android:layout_width="300dp"
-        android:layout_height="300dp" />
+        android:layout_width="200dp"
+        android:layout_height="250dp"
+        android:scaleType="fitCenter"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/tv_movie_detail_title"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/tv_movie_detail_tagline"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_movie_detail_thumb"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:id="@+id/rating_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_movie_detail_tagline"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Average Rating : "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_movie_detail_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="0.0"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/budget_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rating_container"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Budget : "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_movie_detail_budget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text=""
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/revenue_container"
+        android:layout_width="match_parent"
+        android:layout_below="@id/budget_container"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Revenue : "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_movie_detail_revenue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_marginLeft="10dp"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <ExpandableListView
+        android:layout_marginTop="10dp"
+        android:id="@+id/lv_expandable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/revenue_container" />
+
 </RelativeLayout>
