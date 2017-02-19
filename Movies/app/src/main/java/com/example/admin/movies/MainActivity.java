@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements DownloadTaskCompl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        movieList = new ArrayList<>();
         jsonParser = new JsonParser();
 
         //find the references of the UI elements
@@ -57,23 +58,26 @@ public class MainActivity extends AppCompatActivity implements DownloadTaskCompl
 
         //getting the arraylist of movies from the json received
         movieList = jsonParser.parseMovieList(jsonResponse);
-
-        //setting the recycler view
-        layoutManager = new LinearLayoutManager(MainActivity.this);
         adapter = new RecyclerViewAdapter(MainActivity.this, movieList);
-        movieListRecyclerView.setLayoutManager(layoutManager);
-        movieListRecyclerView.setAdapter(adapter);
+        if (movieList.size() > 0) {
+            //setting the recycler view
+            layoutManager = new LinearLayoutManager(MainActivity.this);
+            movieListRecyclerView.setLayoutManager(layoutManager);
+            movieListRecyclerView.setAdapter(adapter);
+            movieListRecyclerView.addOnItemTouchListener(
+                    new RecyclerViewClickListener(MainActivity.this, new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            Intent movieDetailIntent = new Intent(MainActivity.this, MovieDetailActivity.class);
+                            movieDetailIntent.putExtra(IntentExtras.MOVIE_ID, movieList.get(position).getId());
+                            MainActivity.this.startActivity(movieDetailIntent);
+                        }
+                    })
+            );
+        } else {
+            Toast.makeText(this, "No movies found with name : " + movieName, Toast.LENGTH_SHORT).show();
 
-        movieListRecyclerView.addOnItemTouchListener(
-                new RecyclerViewClickListener(MainActivity.this, new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Intent movieDetailIntent = new Intent(MainActivity.this, MovieDetailActivity.class);
-                        movieDetailIntent.putExtra(IntentExtras.MOVIE_ID, movieList.get(position).getId());
-                        MainActivity.this.startActivity(movieDetailIntent);
-                    }
-                })
-        );
+        }
     }
 
     @Override
