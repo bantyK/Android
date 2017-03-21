@@ -25,6 +25,7 @@
         android:layout_gravity="bottom">
         <EditText
             android:id="@+id/todoText"
+            android:hint="@string/enter_the_todo_text_here"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <Button
