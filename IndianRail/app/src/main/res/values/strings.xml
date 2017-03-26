@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Indian Rail</string>
+    <string name="train_number">Train Number</string>
+    <string name="search">Search</string>
 </resources>
