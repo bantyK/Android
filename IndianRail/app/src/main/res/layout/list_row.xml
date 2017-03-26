@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:id="@+id/rl_list_row_root_view"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tv_serial_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1" />
+
+    <TextView
+        android:id="@+id/tv_station_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_serial_number"
+        android:paddingLeft="10dp"
+        android:text="PUNE" />
+
+    <TextView
+        android:id="@+id/tv_station_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_station_name"
+        android:paddingLeft="10dp"
+        android:text="PUNE" />
+
+    <TextView
+        android:id="@+id/tv_arrival_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_station_code"
+        android:paddingLeft="10dp"
+        android:text="10:45" />
+
+    <TextView
+        android:id="@+id/tv_departure_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_arrival_time"
+        android:paddingLeft="10dp"
+        android:text="12:45" />
+
+    <TextView
+        android:id="@+id/tv_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_departure_time"
+        android:paddingLeft="10dp"
+        android:text="1000" />
+
+    <TextView
+        android:id="@+id/tv_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_distance"
+        android:paddingLeft="10dp"
+        android:text="1" />
+
+
+</RelativeLayout>
