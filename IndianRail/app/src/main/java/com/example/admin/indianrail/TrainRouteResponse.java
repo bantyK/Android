@@ -2,7 +2,7 @@ package com.example.admin.indianrail;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class TrainRouteResponse {
     @SerializedName("name")
@@ -10,9 +10,9 @@ public class TrainRouteResponse {
     @SerializedName("number")
     private String trainNumber;
     @SerializedName("route")
-    private List<TrainRoute> trainRoutes;
+    private ArrayList<TrainRoute> trainRoutes;
 
-    public TrainRouteResponse(String trainName, String trainNumber, List<TrainRoute> trainRoutes) {
+    public TrainRouteResponse(String trainName, String trainNumber, ArrayList<TrainRoute> trainRoutes) {
         this.trainName = trainName;
         this.trainNumber = trainNumber;
         this.trainRoutes = trainRoutes;
@@ -26,7 +26,7 @@ public class TrainRouteResponse {
         return trainNumber;
     }
 
-    public List<TrainRoute> getTrainRoutes() {
+    public ArrayList<TrainRoute> getTrainRoutes() {
         return trainRoutes;
     }
 }

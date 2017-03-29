@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     ApiInterface apiInterface;
-    List<TrainRoute> trainStations;
+    ArrayList<TrainRoute> trainStations;
     ListView routeList;
     Button searchButton;
     EditText trainNumberEditText;
