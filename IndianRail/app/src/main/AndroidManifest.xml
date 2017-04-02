@@ -18,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TrainRouteListActivity"></activity>
+        <activity android:name=".TrainRouteListActivity" />
+        <activity android:name=".TrainBetweenStations"></activity>
     </application>
 
 </manifest>

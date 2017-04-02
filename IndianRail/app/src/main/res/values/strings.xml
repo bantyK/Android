@@ -2,4 +2,6 @@
     <string name="app_name">Indian Rail</string>
     <string name="train_number">Train Number</string>
     <string name="search">Search</string>
+    <string name="source_station">Source Station</string>
+    <string name="destination_station">Destination Station</string>
 </resources>

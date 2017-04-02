@@ -27,4 +27,8 @@ public class MainActivity extends AppCompatActivity {
     public void trainRouteListClicked(View view) {
         startActivity(new Intent(this,TrainRouteListActivity.class));
     }
+
+    public void trainBetweenStationButtonClicked(View view) {
+        startActivity(new Intent(this,TrainBetweenStations.class));
+    }
 }
