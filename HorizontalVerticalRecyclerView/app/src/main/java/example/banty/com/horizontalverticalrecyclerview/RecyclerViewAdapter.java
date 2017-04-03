@@ -14,6 +14,8 @@ import java.util.ArrayList;
 
 class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ItemRowHolder> {
 
+    private static final int VIEWTYPE1 = 1;
+    private static final int VIEWTYPE2 = 2;
     private final ArrayList<SectionDataModel> allSampleData;
     private final Context context;
 
@@ -23,9 +25,25 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ItemR
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if (position % 2 == 0)
+            return VIEWTYPE1;
+        else
+            return VIEWTYPE2;
+    }
+
+    @Override
     public ItemRowHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item,parent,false);
+
+        // if we have a switch case here then that means we will have different type of layout in different rows of the main recycler view
+        View v = null;
+        if (viewType == VIEWTYPE1) {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.list_item_1, parent, false);
+        } else {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.list_item_2, parent, false);
+        }
         return new ItemRowHolder(v);
     }
 
@@ -44,14 +62,14 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ItemR
         holder.btnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "click event on more, "+sectionName , Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "click event on more, " + sectionName, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return allSampleData !=null ? allSampleData.size() : 0;
+        return allSampleData != null ? allSampleData.size() : 0;
     }
 
 
@@ -66,7 +84,7 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ItemR
             super(view);
             this.itemTitle = (TextView) view.findViewById(R.id.itemTitle);
             this.recycler_view_list = (RecyclerView) view.findViewById(R.id.horizontal_recycler_view);
-            this.btnMore= (Button) view.findViewById(R.id.btnMore);
+            this.btnMore = (Button) view.findViewById(R.id.btnMore);
 
         }
 
