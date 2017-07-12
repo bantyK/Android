@@ -43,7 +43,7 @@ public class SpinnerData {
         categoryIdMap.put("Arts", 25);
         categoryIdMap.put("Celebrities", 26);
         categoryIdMap.put("Animals", 27);
-        categoryIdMap.put("Vechiles", 28);
+        categoryIdMap.put("Vehicles", 28);
         categoryIdMap.put("Entertainment: Comics", 29);
         categoryIdMap.put("Science: Gadgets", 30);
         categoryIdMap.put("Entertainment: Japanese Anime & Manga", 31);

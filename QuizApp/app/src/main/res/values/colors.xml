@@ -5,4 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="start_button_active">#0966F7</color>
     <color name="start_button_normal">#0AA3F5</color>
+    <color name="game_screen_background">#292929</color>
+    <color name="question_color">#1C2833</color>
+    <color name="correct_answer_click">#28B463</color>
+    <color name="incorrect_answer_click">#E74C3C</color>
 </resources>

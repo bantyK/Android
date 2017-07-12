@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_main_screen);
-        initSpinner();
+        setContentView(R.layout.game_screen_layout);
+//        initSpinner();
 
         getDataFromAPI();
     }
