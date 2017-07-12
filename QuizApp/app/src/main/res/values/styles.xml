@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="MyButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">@color/start_button_active</item>
+        <item name="colorButtonNormal">@color/start_button_normal</item>
+    </style>
+
 </resources>
