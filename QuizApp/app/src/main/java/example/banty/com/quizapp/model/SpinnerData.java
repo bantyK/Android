@@ -14,12 +14,12 @@ public class SpinnerData {
     }
 
     public static String[] getCategorySpinnerData() {
-        HashMap<String, Integer> categoryIdMap = setUpCategoryHashMap();
+        HashMap<String, Integer> categoryIdMap = getCategoryHashMap();
         Set<String> categoryKeySet = categoryIdMap.keySet();
         return categoryKeySet.toArray(new String[categoryKeySet.size()]);
     }
 
-    private static HashMap<String, Integer> setUpCategoryHashMap() {
+    public static HashMap<String, Integer> getCategoryHashMap() {
         //https://opentdb.com/api_category.php
 
         HashMap<String, Integer> categoryIdMap = new HashMap<>();

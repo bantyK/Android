@@ -2,14 +2,14 @@ package example.banty.com.quizapp.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class ApiResponse {
     @SerializedName("response")
     private int response;
 
     @SerializedName("results")
-    private List<Question> questions;
+    private ArrayList<Question> questions;
 
     public int getResponse() {
         return response;
@@ -19,11 +19,11 @@ public class ApiResponse {
         this.response = response;
     }
 
-    public List<Question> getQuestions() {
+    public ArrayList<Question> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<Question> questions) {
+    public void setQuestions(ArrayList<Question> questions) {
         this.questions = questions;
     }
 }
