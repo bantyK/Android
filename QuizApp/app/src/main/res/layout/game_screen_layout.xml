@@ -21,6 +21,7 @@
                 android:background="@drawable/question_background">
 
                 <TextView
+                    android:id="@+id/question_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -51,6 +52,7 @@
                     android:textColor="#2C3E50" />
 
                 <Button
+                    android:id="@+id/btn_option_B"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
@@ -59,6 +61,7 @@
                     android:textColor="#2C3E50" />
 
                 <Button
+                    android:id="@+id/btn_option_C"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
@@ -67,6 +70,7 @@
                     android:textColor="#2C3E50" />
 
                 <Button
+                    android:id="@+id/btn_option_D"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/answer_button_background"

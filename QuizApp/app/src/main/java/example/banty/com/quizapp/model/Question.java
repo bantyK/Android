@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class Question implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<Question> CREATOR = new Parcelable.Creator<Question>() {
@@ -29,7 +31,7 @@ public class Question implements Parcelable {
     @SerializedName("correct_answer")
     private String correctAns;
     @SerializedName("incorrect_answers")
-    private String[] inCorrectAns;
+    private ArrayList<String> inCorrectAns;
 
     protected Question(Parcel in) {
         category = in.readString();
@@ -37,6 +39,32 @@ public class Question implements Parcelable {
         difficulty = in.readString();
         question = in.readString();
         correctAns = in.readString();
+        if (in.readByte() == 0x01) {
+            inCorrectAns = new ArrayList<String>();
+            in.readList(inCorrectAns, String.class.getClassLoader());
+        } else {
+            inCorrectAns = null;
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(category);
+        dest.writeString(type);
+        dest.writeString(difficulty);
+        dest.writeString(question);
+        dest.writeString(correctAns);
+        if (inCorrectAns == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(inCorrectAns);
+        }
     }
 
     public String getCategory() {
@@ -63,22 +91,6 @@ public class Question implements Parcelable {
         this.difficulty = difficulty;
     }
 
-    public String getCorrectAns() {
-        return correctAns;
-    }
-
-    public void setCorrectAns(String correctAns) {
-        this.correctAns = correctAns;
-    }
-
-    public String[] getInCorrectAns() {
-        return inCorrectAns;
-    }
-
-    public void setInCorrectAns(String[] inCorrectAns) {
-        this.inCorrectAns = inCorrectAns;
-    }
-
     public String getQuestion() {
         return question;
     }
@@ -87,17 +99,19 @@ public class Question implements Parcelable {
         this.question = question;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getCorrectAns() {
+        return correctAns;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(category);
-        dest.writeString(type);
-        dest.writeString(difficulty);
-        dest.writeString(question);
-        dest.writeString(correctAns);
+    public void setCorrectAns(String correctAns) {
+        this.correctAns = correctAns;
+    }
+
+    public ArrayList<String> getInCorrectAns() {
+        return inCorrectAns;
+    }
+
+    public void setInCorrectAns(ArrayList<String> inCorrectAns) {
+        this.inCorrectAns = inCorrectAns;
     }
 }
