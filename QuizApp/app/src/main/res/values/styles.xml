@@ -14,17 +14,4 @@
         <item name="colorButtonNormal">@color/start_button_normal</item>
     </style>
 
-    <style name="correct_answer_style" parent="Theme.AppCompat.Light">
-        <item name="colorControlHighlight">@color/correct_answer_click</item>
-        <item name="colorButtonNormal">#D0D3D4</item>
-    </style>
-
-
-    <style name="incorrect_answer_style" parent="Theme.AppCompat.Light">
-        <item name="colorControlHighlight">@color/incorrect_answer_click</item>
-        <item name="colorButtonNormal">#D0D3D4</item>
-    </style>
-
-
-
 </resources>

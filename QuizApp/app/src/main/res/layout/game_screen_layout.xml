@@ -6,25 +6,6 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/question_background">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:gravity="center"
-            android:paddingBottom="20dp"
-            android:paddingTop="20dp"
-            android:text="According to Toby Fox, what was the method to creating the initial tune for Megalovania?"
-            android:textColor="@color/question_color"
-            android:textSize="30sp" />
-    </LinearLayout>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -32,42 +13,67 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:orientation="vertical">
 
-
-            <Button
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginBottom="20dp"
-                android:text="Singing into a Microphone"
-                android:textColor="#2C3E50"
-                android:theme="@style/incorrect_answer_style" />
+                android:layout_height="wrap_content"
+                android:background="@drawable/question_background">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginBottom="20dp"
-                android:text="Playing a Piano"
-                android:textColor="#2C3E50"
-                android:theme="@style/correct_answer_style" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:gravity="center"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
+                    android:text="According to Toby Fox, what was the method to creating the initial tune for Megalovania?"
+                    android:textColor="@color/question_color"
+                    android:textSize="30sp" />
+            </LinearLayout>
 
-            <Button
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginBottom="20dp"
-                android:text="Using a Composer Software"
-                android:textColor="#2C3E50"
-                android:theme="@style/incorrect_answer_style" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="Listened to birds at the park"
-                android:textColor="#2C3E50"
-                android:theme="@style/incorrect_answer_style" />
+
+                <Button
+                    android:id="@+id/btn_option_A"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/answer_button_background"
+                    android:text="Singing into a Microphone"
+                    android:textColor="#2C3E50" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/answer_button_background"
+                    android:text="Playing a Piano"
+                    android:textColor="#2C3E50" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/answer_button_background"
+                    android:text="Using a Composer Software"
+                    android:textColor="#2C3E50" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/answer_button_background"
+                    android:text="Listened to birds at the park"
+                    android:textColor="#2C3E50" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
 
 </LinearLayout>
