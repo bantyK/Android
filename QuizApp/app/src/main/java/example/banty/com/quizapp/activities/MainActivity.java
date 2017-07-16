@@ -39,6 +39,7 @@ public class MainActivity extends BaseActivity {
     private String difficultySelected = "";
     private int categorySelected;
     private String typeSelected = "";
+
     private ProgressDialog progressDialog;
     private AdapterView.OnItemClickListener categoryItemSelected = new AdapterView.OnItemClickListener() {
         @Override
@@ -78,9 +79,9 @@ public class MainActivity extends BaseActivity {
 
     private boolean wrongInput() {
         return TextUtils.isEmpty(numberOfQuestionEditText.getText().toString()) ||
-                TextUtils.isEmpty(difficultySelected) ||
-                TextUtils.isEmpty(typeSelected) ||
-                categorySelected == -1;
+                TextUtils.isEmpty(difficultySpinner.getText()) ||
+                TextUtils.isEmpty(typeSpinner.getText()) ||
+                TextUtils.isEmpty(categorySpinner.getText());
     }
 
     @Override
@@ -103,6 +104,7 @@ public class MainActivity extends BaseActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading...");
 
+        //register onClick listeners for buttons
         startQuizButton.setOnClickListener(startButtonClickListener);
         categorySpinner.setOnItemClickListener(categoryItemSelected);
         typeSpinner.setOnItemClickListener(typeItemSelected);
@@ -118,13 +120,12 @@ public class MainActivity extends BaseActivity {
 
         String[] categories = SpinnerData.getCategorySpinnerData();
         setUpSpinner(categories, categorySpinner);
-
-
     }
 
     private void setUpSpinner(String[] spinnerData, MaterialBetterSpinner spinner) {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, spinnerData);
+        spinner.setText(spinnerData[0]);
         spinner.setAdapter(arrayAdapter);
     }
 
@@ -141,9 +142,13 @@ public class MainActivity extends BaseActivity {
                 hideProgressBar();
                 Log.d(TAG, "onResponse: response = " + response.body());
                 ArrayList<Question> questionList = response.body().getQuestions();
-                Intent gameActivityIntent = new Intent(MainActivity.this, GameScreenActivity.class);
-                gameActivityIntent.putParcelableArrayListExtra(GameScreenActivity.INTENT_QUESTIONS_DATA, questionList);
-                startActivity(gameActivityIntent);
+                if (questionList.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "API Error please select different option", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent gameActivityIntent = new Intent(MainActivity.this, GameScreenActivity.class);
+                    gameActivityIntent.putParcelableArrayListExtra(GameScreenActivity.INTENT_QUESTIONS_DATA, questionList);
+                    startActivity(gameActivityIntent);
+                }
             }
 
             @Override

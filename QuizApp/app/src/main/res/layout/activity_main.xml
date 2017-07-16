@@ -26,7 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/number_question"
-            android:inputType="number" />
+            android:inputType="number"
+            android:text="10" />
     </android.support.design.widget.TextInputLayout>
 
     <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
