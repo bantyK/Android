@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.GameScreenActivity" />
+        <activity android:name=".activities.GameoverScreen" />
         <activity
             android:name=".activities.BaseActivity"
             android:screenOrientation="portrait" />

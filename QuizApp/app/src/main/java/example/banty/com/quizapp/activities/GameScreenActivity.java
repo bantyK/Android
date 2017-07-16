@@ -29,6 +29,8 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
     public static final String TAG = GameScreenActivity.class.getSimpleName();
     final Handler handler = new Handler();
     private ArrayList<Question> questionArrayList;
+    private ArrayList<String> userAnswerList = new ArrayList<>(); // answers given by user
+    private ArrayList<String> correctAnswerList = new ArrayList<>(); // correct answers
     private TextView questionText;
     private Button answerOptionA, answerOptionB, answerOptionC, answerOptionD;
     private ImageView correctAnsIndicatorImage;
@@ -66,6 +68,8 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
 
     private void presentQuestionOnUI(Question question) {
         questionText.setText(convertHTMLString(question.getQuestion()));
+        correctAnswerList.add(question.getCorrectAns());
+
         if (question.getType().equals("multiple")) {
             //multiple option questions
             setUpMultipleAnswerButtons(question.getCorrectAns(), question.getInCorrectAns());
@@ -117,7 +121,7 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         Button answerOptionClicked = (Button) view;
-
+        userAnswerList.add(answerOptionClicked.getText().toString());
         if (answerOptionClicked.getText().toString().equals(correctAnswer)) {
             Toast.makeText(this, "Correct Answer", Toast.LENGTH_SHORT).show();
             final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.right_answer);
@@ -143,9 +147,12 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
                 if (currentQuestionIndex < questionArrayList.size())
                     presentQuestionOnUI(questionArrayList.get(currentQuestionIndex));
                 else {
-                    Toast.makeText(GameScreenActivity.this, "Game over..", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "onClick: Total score = " + score);
                     unregisterAllButtons();
+                    Intent intent = new Intent(GameScreenActivity.this, GameoverScreen.class);
+                    intent.putExtra(GameoverScreen.INTENT_KEY_SCORE, score + "");
+                    intent.putStringArrayListExtra(GameoverScreen.INTENT_KEY_USER_ANSWERS, userAnswerList);
+                    intent.putParcelableArrayListExtra(GameoverScreen.INTENT_KEY_QUESTIONS, questionArrayList);
+                    startActivity(intent);
                 }
             }
         }, 500);
