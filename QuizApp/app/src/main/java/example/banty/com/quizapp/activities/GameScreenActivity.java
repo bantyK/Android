@@ -64,13 +64,30 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
 
     private void presentQuestionOnUI(Question question) {
         questionText.setText(convertHTMLString(question.getQuestion()));
-        setUpAnswerButtons(question.getCorrectAns(), question.getInCorrectAns());
+        if (question.getType().equals("multiple")) {
+            //multiple option questions
+            setUpMultipleAnswerButtons(question.getCorrectAns(), question.getInCorrectAns());
+        } else {
+            //True/False type questions
+            setUpBooleanAnswerButtons(question.getCorrectAns(), question.getInCorrectAns());
+        }
         this.correctAnswer = question.getCorrectAns();
     }
 
-    private void setUpAnswerButtons(String correctAnswer, ArrayList<String> incorrectAnswerList) {
+    private void setUpBooleanAnswerButtons(String correctAns, ArrayList<String> inCorrectAns) {
+        int correctAnswerOption = new Random().nextInt(2) + 1;
+
+        //only require two buttons so hiding the last two buttons
+        answerOptionC.setVisibility(View.GONE);
+        answerOptionD.setVisibility(View.GONE);
+
+        answerOptionA.setText("True");
+        answerOptionB.setText("False");
+    }
+
+    private void setUpMultipleAnswerButtons(String correctAnswer, ArrayList<String> incorrectAnswerList) {
         int correctAnswerOption = new Random().nextInt(4) + 1;
-        Log.d(TAG, "setUpAnswerButtons: correct button = " + correctAnswerOption);
+        Log.d(TAG, "setUpMultipleAnswerButtons: correct button = " + correctAnswerOption);
 
         if (correctAnswerOption == 1) {
             answerOptionA.setText(correctAnswer);
@@ -130,9 +147,6 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
                 }
             }
         }, 500);
-
-
-
     }
 
     private void unregisterAllButtons() {
