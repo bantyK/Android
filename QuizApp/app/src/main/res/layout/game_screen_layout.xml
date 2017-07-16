@@ -77,6 +77,14 @@
                     android:text="Listened to birds at the park"
                     android:textColor="#2C3E50" />
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/answer_image_indicator"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 

@@ -1,14 +1,17 @@
 package example.banty.com.quizapp.activities;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,11 +25,12 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
 
     public static final String INTENT_QUESTIONS_DATA = "intent.questions.data";
     public static final String TAG = GameScreenActivity.class.getSimpleName();
+    final Handler handler = new Handler();
     private ArrayList<Question> questionArrayList;
     private TextView questionText;
     private Button answerOptionA, answerOptionB, answerOptionC, answerOptionD;
+    private ImageView correctAnsIndicatorImage;
     private String correctAnswer;
-
     private int currentQuestionIndex = 0;
     private int score;
 
@@ -50,6 +54,8 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
         answerOptionC = (Button) findViewById(R.id.btn_option_C);
         answerOptionD = (Button) findViewById(R.id.btn_option_D);
 
+        correctAnsIndicatorImage = (ImageView) findViewById(R.id.answer_image_indicator);
+
         answerOptionA.setOnClickListener(this);
         answerOptionB.setOnClickListener(this);
         answerOptionC.setOnClickListener(this);
@@ -59,7 +65,6 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
     private void presentQuestionOnUI(Question question) {
         questionText.setText(convertHTMLString(question.getQuestion()));
         setUpAnswerButtons(question.getCorrectAns(), question.getInCorrectAns());
-
         this.correctAnswer = question.getCorrectAns();
     }
 
@@ -96,19 +101,37 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
 
         if (answerOptionClicked.getText().toString().equals(correctAnswer)) {
             Toast.makeText(this, "Correct Answer", Toast.LENGTH_SHORT).show();
+            final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.right_answer);
+            mediaPlayer.start();
+            correctAnsIndicatorImage.setImageDrawable(this.getResources().getDrawable(R.drawable.green_tick));
+            correctAnsIndicatorImage.setVisibility(View.VISIBLE);
             score++;
         } else {
             Toast.makeText(this, "Incorrect Answer", Toast.LENGTH_SHORT).show();
+            final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.wrong_answer);
+            mediaPlayer.start();
+            correctAnsIndicatorImage.setImageDrawable(this.getResources().getDrawable(R.drawable.red_cross));
+            correctAnsIndicatorImage.setVisibility(View.VISIBLE);
         }
 
-        currentQuestionIndex += 1;
-        if (currentQuestionIndex < questionArrayList.size())
-            presentQuestionOnUI(questionArrayList.get(currentQuestionIndex));
-        else {
-            Toast.makeText(this, "Game over..", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "onClick: Total score = " + score);
-            unregisterAllButtons();
-        }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                correctAnsIndicatorImage.setVisibility(View.GONE);
+
+                //increase the current index and display the next question
+                currentQuestionIndex += 1;
+                if (currentQuestionIndex < questionArrayList.size())
+                    presentQuestionOnUI(questionArrayList.get(currentQuestionIndex));
+                else {
+                    Toast.makeText(GameScreenActivity.this, "Game over..", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onClick: Total score = " + score);
+                    unregisterAllButtons();
+                }
+            }
+        }, 500);
+
+
 
     }
 
