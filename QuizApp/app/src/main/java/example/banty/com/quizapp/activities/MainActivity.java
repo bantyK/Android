@@ -1,5 +1,6 @@
 package example.banty.com.quizapp.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -38,7 +39,7 @@ public class MainActivity extends BaseActivity {
     private String difficultySelected = "";
     private int categorySelected;
     private String typeSelected = "";
-
+    private ProgressDialog progressDialog;
     private AdapterView.OnItemClickListener categoryItemSelected = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -97,6 +98,11 @@ public class MainActivity extends BaseActivity {
         difficultySpinner = (MaterialBetterSpinner) findViewById(R.id.difficulty_spinner);
         typeSpinner = (MaterialBetterSpinner) findViewById(R.id.type_spinner);
 
+        //Set up progressbar
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Loading...");
+
         startQuizButton.setOnClickListener(startButtonClickListener);
         categorySpinner.setOnItemClickListener(categoryItemSelected);
         typeSpinner.setOnItemClickListener(typeItemSelected);
@@ -123,14 +129,16 @@ public class MainActivity extends BaseActivity {
     }
 
     private void getDataFromAPI(int numberOfQuestions, int categoryId, String difficulty, String type) {
-        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        progressDialog.show();
 
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
         Call<ApiResponse> call = apiService.getQuestions(numberOfQuestions, categoryId, difficulty, type);
 
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                hideProgressBar();
                 Log.d(TAG, "onResponse: response = " + response.body());
                 ArrayList<Question> questionList = response.body().getQuestions();
                 Intent gameActivityIntent = new Intent(MainActivity.this, GameScreenActivity.class);
@@ -144,4 +152,10 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
+
+    private void hideProgressBar() {
+        if (progressDialog.isShowing())
+            progressDialog.cancel();
+    }
+
 }
