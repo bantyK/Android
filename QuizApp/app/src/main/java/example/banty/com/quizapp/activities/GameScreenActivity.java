@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import example.banty.com.quizapp.R;
 import example.banty.com.quizapp.model.Question;
@@ -53,12 +55,36 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
 
     private void presentQuestionOnUI(Question question) {
         questionText.setText(convertHTMLString(question.getQuestion()));
-        answerOptionA.setText(convertHTMLString(question.getCorrectAns()));
-        answerOptionB.setText(convertHTMLString(question.getInCorrectAns().get(0)));
-        answerOptionC.setText(convertHTMLString(question.getInCorrectAns().get(1)));
-        answerOptionD.setText(convertHTMLString(question.getInCorrectAns().get(2)));
+        setUpAnswerButtons(question.getCorrectAns(), question.getInCorrectAns());
 
         this.correctAnswer = question.getCorrectAns();
+    }
+
+    private void setUpAnswerButtons(String correctAnswer, ArrayList<String> incorrectAnswerList) {
+        int correctAnswerOption = new Random().nextInt(4) + 1;
+        Log.d(TAG, "setUpAnswerButtons: correct ans button = " + correctAnswerOption);
+
+        if (correctAnswerOption == 1) {
+            answerOptionA.setText(correctAnswer);
+            answerOptionB.setText(incorrectAnswerList.get(0));
+            answerOptionC.setText(incorrectAnswerList.get(1));
+            answerOptionD.setText(incorrectAnswerList.get(2));
+        } else if (correctAnswerOption == 2) {
+            answerOptionB.setText(correctAnswer);
+            answerOptionA.setText(incorrectAnswerList.get(0));
+            answerOptionC.setText(incorrectAnswerList.get(1));
+            answerOptionD.setText(incorrectAnswerList.get(2));
+        } else if (correctAnswerOption == 3) {
+            answerOptionC.setText(correctAnswer);
+            answerOptionA.setText(incorrectAnswerList.get(0));
+            answerOptionB.setText(incorrectAnswerList.get(1));
+            answerOptionD.setText(incorrectAnswerList.get(2));
+        } else {
+            answerOptionD.setText(correctAnswer);
+            answerOptionA.setText(incorrectAnswerList.get(0));
+            answerOptionB.setText(incorrectAnswerList.get(1));
+            answerOptionC.setText(incorrectAnswerList.get(2));
+        }
     }
 
     @Override
