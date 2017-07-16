@@ -1,11 +1,13 @@
 package example.banty.com.quizapp.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
@@ -162,5 +164,36 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
         } else {
             return Html.fromHtml(htmlText);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (currentQuestionIndex < questionArrayList.size())
+            showCloseDialog();
+        else
+            finish();
+    }
+
+    private void showCloseDialog() {
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this);
+        }
+        builder.setTitle("Exit Game")
+                .setMessage("You will lose all your progress")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }

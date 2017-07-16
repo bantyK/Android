@@ -114,12 +114,15 @@ public class MainActivity extends BaseActivity {
     private void initSpinner() {
         String[] difficulties = SpinnerData.getDifficultySpinnerData();
         setUpSpinner(difficulties, difficultySpinner);
+        difficultySelected = "easy"; //default value of difficulty
 
         String[] types = SpinnerData.getTypeSpinnerData();
         setUpSpinner(types, typeSpinner);
+        typeSelected = "multiple"; //default value of type
 
         String[] categories = SpinnerData.getCategorySpinnerData();
         setUpSpinner(categories, categorySpinner);
+        categorySelected = 15; //default value of category
     }
 
     private void setUpSpinner(String[] spinnerData, MaterialBetterSpinner spinner) {
