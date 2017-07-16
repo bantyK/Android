@@ -27,6 +27,9 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
     private Button answerOptionA, answerOptionB, answerOptionC, answerOptionD;
     private String correctAnswer;
 
+    private int currentQuestionIndex = 0;
+    private int score;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +40,7 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
             questionArrayList = intentReceived.getParcelableArrayListExtra(INTENT_QUESTIONS_DATA);
         }
 
-        presentQuestionOnUI(questionArrayList.get(0));
+        presentQuestionOnUI(questionArrayList.get(currentQuestionIndex));
     }
 
     private void initUIElements() {
@@ -62,7 +65,7 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
 
     private void setUpAnswerButtons(String correctAnswer, ArrayList<String> incorrectAnswerList) {
         int correctAnswerOption = new Random().nextInt(4) + 1;
-        Log.d(TAG, "setUpAnswerButtons: correct ans button = " + correctAnswerOption);
+        Log.d(TAG, "setUpAnswerButtons: correct button = " + correctAnswerOption);
 
         if (correctAnswerOption == 1) {
             answerOptionA.setText(correctAnswer);
@@ -93,9 +96,27 @@ public class GameScreenActivity extends BaseActivity implements View.OnClickList
 
         if (answerOptionClicked.getText().toString().equals(correctAnswer)) {
             Toast.makeText(this, "Correct Answer", Toast.LENGTH_SHORT).show();
+            score++;
         } else {
             Toast.makeText(this, "Incorrect Answer", Toast.LENGTH_SHORT).show();
         }
+
+        currentQuestionIndex += 1;
+        if (currentQuestionIndex < questionArrayList.size())
+            presentQuestionOnUI(questionArrayList.get(currentQuestionIndex));
+        else {
+            Toast.makeText(this, "Game over..", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "onClick: Total score = " + score);
+            unregisterAllButtons();
+        }
+
+    }
+
+    private void unregisterAllButtons() {
+        answerOptionA.setOnClickListener(null);
+        answerOptionB.setOnClickListener(null);
+        answerOptionC.setOnClickListener(null);
+        answerOptionD.setOnClickListener(null);
     }
 
     private Spanned convertHTMLString(String htmlText) {
