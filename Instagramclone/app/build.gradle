@@ -31,5 +31,7 @@ dependencies {
     //Design Library for coordinator layout and Toolbars
     compile 'com.android.support:design:25.3.1'
     compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.2'
+    //Circle image view
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 
 }
