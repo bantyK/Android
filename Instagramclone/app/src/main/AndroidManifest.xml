@@ -21,6 +21,7 @@
         <activity android:name=".activities.likes.LikesActivity"/>
         <activity android:name=".activities.profile.ProfileActivity"/>
         <activity android:name=".activities.BaseActivity"/>
+        <activity android:name=".activities.profile.AccountSettingActivity"/>
     </application>
 
 </manifest>
