@@ -21,8 +21,8 @@ public class ProfileActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
         setContentView(R.layout.activity_profile);
-//        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom_nav_view_bar);
-//        setupBottomNavigationView(bottomNavigationViewEx, MENU_POSITION);
+        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom_nav_view_bar);
+        setupBottomNavigationView(bottomNavigationViewEx, MENU_POSITION);
 
         setUpToolbar();
     }
