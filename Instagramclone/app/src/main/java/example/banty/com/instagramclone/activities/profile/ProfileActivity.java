@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -19,6 +20,8 @@ public class ProfileActivity extends BaseActivity {
     private static final String TAG = "ProfileActivity";
     private static final int MENU_POSITION = 4;
 
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +29,8 @@ public class ProfileActivity extends BaseActivity {
         setContentView(R.layout.activity_profile);
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom_nav_view_bar);
         setupBottomNavigationView(bottomNavigationViewEx, MENU_POSITION);
+        progressBar = (ProgressBar) findViewById(R.id.profile_progress_bar);
+        progressBar.setVisibility(View.GONE);
         setToolBar();
     }
 
