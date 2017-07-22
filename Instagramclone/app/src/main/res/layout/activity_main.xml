@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="example.banty.com.instagramclone.MainActivity">
+    tools:context="example.banty.com.instagramclone.activities.HomeActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
