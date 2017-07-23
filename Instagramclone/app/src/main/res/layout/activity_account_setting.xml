@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/snippet_row_account_setting_toolbar" />
+            <include layout="@layout/snippet_top_account_setting_toolbar" />
         </RelativeLayout>
 
         <RelativeLayout
