@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
 import java.util.ArrayList;
 
 import example.banty.com.instagramclone.R;
@@ -18,6 +20,7 @@ import example.banty.com.instagramclone.adapters.SectionsStatePagerAdapter;
 
 public class AccountSettingActivity extends BaseActivity {
     private static final String TAG = "AccountSettingActivity";
+    private static final int MENU_POSITION = 4;
     private View.OnClickListener backArrowClicked = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -32,9 +35,10 @@ public class AccountSettingActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_setting);
+        BottomNavigationViewEx bottomNavigationView = (BottomNavigationViewEx) findViewById(R.id.bottom_nav_view_bar);
+        setupBottomNavigationView(bottomNavigationView, MENU_POSITION);
         ImageView backArrow = (ImageView) findViewById(R.id.iv_back_arrow);
         backArrow.setOnClickListener(backArrowClicked);
-
 
         viewPager = (ViewPager) findViewById(R.id.container);
         relativeLayout = (RelativeLayout) findViewById(R.id.rel_layout_1);

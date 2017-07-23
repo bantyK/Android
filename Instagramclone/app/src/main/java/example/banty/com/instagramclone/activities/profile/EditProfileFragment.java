@@ -19,13 +19,16 @@ public class EditProfileFragment extends Fragment {
     private static final String TAG = "EditProfileFragment";
 
     private ImageView profilePhoto;
+    private View backButton;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_edit_profile,container,false);
+        View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
         profilePhoto = (ImageView) view.findViewById(R.id.profile_photo);
 
+        setBackButton(view);
         initImageLoader();
         setProfileImage();
 
@@ -38,5 +41,15 @@ public class EditProfileFragment extends Fragment {
     private void setProfileImage() {
         String imageURL = "www.androidcentral.com/sites/androidcentral.com/files/styles/xlarge/public/article_images/2015/01/podcast-event.jpg?itok=zsMimlTM";
         UniversalImageLoader.setImage(imageURL,profilePhoto,null,"https://");
+    }
+
+    public void setBackButton(View view) {
+        ImageView backButton = (ImageView) view.findViewById(R.id.iv_back_arrow);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
     }
 }
