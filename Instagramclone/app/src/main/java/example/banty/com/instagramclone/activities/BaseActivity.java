@@ -7,9 +7,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import example.banty.com.instagramclone.R;
 import example.banty.com.instagramclone.utils.BottomNavigationViewHelper;
+import example.banty.com.instagramclone.utils.UniversalImageLoader;
 
 public class BaseActivity extends AppCompatActivity {
 
