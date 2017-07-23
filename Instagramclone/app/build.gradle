@@ -33,5 +33,7 @@ dependencies {
     compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.2'
     //Circle image view
     compile 'de.hdodenhof:circleimageview:2.1.0'
+    //Image loader
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
 }
