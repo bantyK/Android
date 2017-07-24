@@ -18,6 +18,7 @@
             android:text="Register For a New Account"
             android:textAllCaps="true"
             android:textColor="@color/black"
+            android:layout_marginBottom="40dp"
             android:textSize="20sp" />
 
         <android.support.design.widget.TextInputLayout
