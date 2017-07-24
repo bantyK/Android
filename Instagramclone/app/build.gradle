@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+//firebase plugin
+apply plugin: 'com.google.gms.google-services'
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
