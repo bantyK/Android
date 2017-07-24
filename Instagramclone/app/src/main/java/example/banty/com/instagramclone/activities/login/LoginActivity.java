@@ -1,5 +1,6 @@
 package example.banty.com.instagramclone.activities.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -19,6 +20,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import example.banty.com.instagramclone.R;
 import example.banty.com.instagramclone.activities.BaseActivity;
+import example.banty.com.instagramclone.activities.home.HomeActivity;
+import example.banty.com.instagramclone.register.RegisterActivity;
 
 public class LoginActivity extends BaseActivity {
 
@@ -32,13 +35,15 @@ public class LoginActivity extends BaseActivity {
     private EditText emailEditText, passwordEditText;
     private TextView pleaseWaitTextView;
     private Button loginButton;
+    private TextView registerLinkText;
+
     private View.OnClickListener loginButtonClicked = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             String email = emailEditText.getText().toString();
             String password = passwordEditText.getText().toString();
 
-            if(TextUtils.isEmpty(email) && TextUtils.isEmpty(password)) {
+            if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
                 Toast.makeText(LoginActivity.this, "One or more field empty", Toast.LENGTH_SHORT).show();
             } else {
                 changeProgressBarVisibility(View.VISIBLE);
@@ -47,6 +52,17 @@ public class LoginActivity extends BaseActivity {
             }
         }
     };
+    private View.OnClickListener registerLinkClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            launchRegisterActivity();
+        }
+    };
+
+    private void launchRegisterActivity() {
+        Intent registerIntent = new Intent(this, RegisterActivity.class);
+        startActivity(registerIntent);
+    }
 
     private void signInUser(String email, String password) {
         mFirebaseAuth.signInWithEmailAndPassword(email, password)
@@ -58,6 +74,8 @@ public class LoginActivity extends BaseActivity {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mFirebaseAuth.getCurrentUser();
                             changeProgressBarVisibility(View.GONE);
+                            launchHomeActivity();
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -67,6 +85,11 @@ public class LoginActivity extends BaseActivity {
                         }
                     }
                 });
+    }
+
+    private void launchHomeActivity() {
+        Intent homeIntent = new Intent(this, HomeActivity.class);
+        startActivity(homeIntent);
     }
 
     private void changeProgressBarVisibility(int visisbility) {
@@ -89,10 +112,12 @@ public class LoginActivity extends BaseActivity {
         emailEditText = (EditText) findViewById(R.id.input_email);
         passwordEditText = (EditText) findViewById(R.id.input_password);
         loginButton = (Button) findViewById(R.id.button_login);
+        registerLinkText = (TextView) findViewById(R.id.link_signup);
 
         pleaseWaitTextView.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
         loginButton.setOnClickListener(loginButtonClicked);
+        registerLinkText.setOnClickListener(registerLinkClicked);
     }
 
     private void setFirebaseAuth() {
