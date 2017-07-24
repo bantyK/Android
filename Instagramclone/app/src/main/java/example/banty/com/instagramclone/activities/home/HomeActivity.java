@@ -95,6 +95,7 @@ public class HomeActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
         mFirebaseAuth.addAuthStateListener(mAuthListener);
+        checkUserLoginStatus(mFirebaseAuth.getCurrentUser());
     }
 
     @Override
@@ -104,4 +105,11 @@ public class HomeActivity extends BaseActivity {
             mFirebaseAuth.removeAuthStateListener(mAuthListener);
         }
     }
+
+    private void checkUserLoginStatus(FirebaseUser currentUser) {
+        if (currentUser == null) {
+            launchLoginActivity();
+        }
+    }
+
 }
