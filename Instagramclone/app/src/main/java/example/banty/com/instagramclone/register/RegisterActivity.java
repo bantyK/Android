@@ -16,9 +16,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import example.banty.com.instagramclone.R;
 import example.banty.com.instagramclone.activities.BaseActivity;
+import example.banty.com.instagramclone.models.User;
+import example.banty.com.instagramclone.utils.FirebaseHelper;
 
 
 public class RegisterActivity extends BaseActivity {
@@ -28,18 +35,29 @@ public class RegisterActivity extends BaseActivity {
     //Firebase Auth
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference myRef;
+
+    private FirebaseHelper firebaseHelper; //util class for firebase methods
 
     private EditText emailEditText, passwordEditText, usernameEditText;
     private Button registerButton;
     private ProgressBar progressBar;
     private TextView pleaseWaitTextView;
+
+    private String currentUserId;
+
+    private String email;
+    private String password;
+    private String username;
+
     private View.OnClickListener registerButtonClicked = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             setProgressBarVisibility(View.VISIBLE);
-            String email = emailEditText.getText().toString();
-            String password = passwordEditText.getText().toString();
-            String username = usernameEditText.getText().toString();
+            email = emailEditText.getText().toString();
+            password = passwordEditText.getText().toString();
+            username = usernameEditText.getText().toString();
             if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(username)) {
                 Toast.makeText(RegisterActivity.this, "One or more field empty", Toast.LENGTH_SHORT).show();
             } else {
@@ -53,20 +71,42 @@ public class RegisterActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         initUI();
+        firebaseHelper = new FirebaseHelper(this);
         setFirebaseAuth();
     }
 
     private void setFirebaseAuth() {
         mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = mFirebaseDatabase.getReference();
+
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-
-                if (user != null) {
+            public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
+                if (mFirebaseAuth.getCurrentUser() != null) {
                     //User is signed in
-                    Log.d(TAG, "onAuthStateChanged: user signed in");
+                    final FirebaseUser user = firebaseAuth.getCurrentUser();
+                    Log.d(TAG, "onAuthStateChanged: current user id = " + user.getUid());
+                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // Username should be unique, If same existing username is used, add a random string to the username
+                            if(firebaseHelper.checkIfUsernameExist(username,dataSnapshot)){
+                                Log.d(TAG, "onDataChange: user already exists");
+                                String randomStringToAppend = myRef.push().getKey().substring(3,10);
+                                username += randomStringToAppend;
+                            }
+                            User userToAdd = new User(user.getUid(),email,111,username);
+                            firebaseHelper.addUserToDatabase(userToAdd,myRef);
+                            Toast.makeText(RegisterActivity.this, "Account created", Toast.LENGTH_SHORT).show();
+                        }
 
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 } else {
                     //User is signed out
                     Log.d(TAG, "onAuthStateChanged: user signed out");
@@ -118,7 +158,7 @@ public class RegisterActivity extends BaseActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                            currentUserId =  mFirebaseAuth.getCurrentUser().getUid();
                             setProgressBarVisibility(View.GONE);
                         } else {
                             // If sign in fails, display a message to the user.
