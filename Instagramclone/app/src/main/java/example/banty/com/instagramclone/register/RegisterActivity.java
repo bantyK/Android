@@ -110,6 +110,7 @@ public class RegisterActivity extends BaseActivity {
 
                         }
                     });
+                    finish();
                 } else {
                     //User is signed out
                     Log.d(TAG, "onAuthStateChanged: user signed out");

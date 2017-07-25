@@ -69,18 +69,23 @@ public class LoginActivity extends BaseActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                            changeProgressBarVisibility(View.GONE);
-                            launchHomeActivity();
-                            finish();
+                        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                        if (currentUser.isEmailVerified()) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInWithEmail:success");
+                                changeProgressBarVisibility(View.GONE);
+                                launchHomeActivity();
+                                finish();
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                                changeProgressBarVisibility(View.GONE);
+                            }
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "email not verified, check for verification email in your inbox", Toast.LENGTH_SHORT).show();
                             changeProgressBarVisibility(View.GONE);
                         }
                     }
