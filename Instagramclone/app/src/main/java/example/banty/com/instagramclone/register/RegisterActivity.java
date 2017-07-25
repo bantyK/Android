@@ -58,10 +58,10 @@ public class RegisterActivity extends BaseActivity {
             email = emailEditText.getText().toString();
             password = passwordEditText.getText().toString();
             username = usernameEditText.getText().toString();
-            if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(username)) {
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(username)) {
                 Toast.makeText(RegisterActivity.this, "One or more field empty", Toast.LENGTH_SHORT).show();
             } else {
-                registerNewUser(email,password);
+                registerNewUser(email, password);
             }
         }
     };
@@ -92,14 +92,17 @@ public class RegisterActivity extends BaseActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             // Username should be unique, If same existing username is used, add a random string to the username
-                            if(firebaseHelper.checkIfUsernameExist(username,dataSnapshot)){
+                            if (firebaseHelper.checkIfUsernameExist(username, dataSnapshot)) {
                                 Log.d(TAG, "onDataChange: user already exists");
-                                String randomStringToAppend = myRef.push().getKey().substring(3,10);
+                                String randomStringToAppend = myRef.push().getKey().substring(3, 10);
                                 username += randomStringToAppend;
                             }
-                            User userToAdd = new User(user.getUid(),email,111,username);
-                            firebaseHelper.addUserToDatabase(userToAdd,myRef);
+                            User userToAdd = new User(user.getUid(), email, 111, username);
+                            firebaseHelper.addUserToDatabase(userToAdd, myRef);
                             Toast.makeText(RegisterActivity.this, "Account created", Toast.LENGTH_SHORT).show();
+
+                            //Sign out the user, until the email is verified
+                            mFirebaseAuth.signOut();
                         }
 
                         @Override
@@ -114,6 +117,25 @@ public class RegisterActivity extends BaseActivity {
                 }
             }
         };
+    }
+
+    private void sendVerificationEmail() {
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            user.sendEmailVerification()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "Email sent to " + user.getEmail());
+                            } else {
+                                Toast.makeText(RegisterActivity.this, "Couldn't send verification email", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        } else {
+            Log.d(TAG, "sendVerificationEmail: user is null");
+        }
     }
 
     @Override
@@ -158,8 +180,9 @@ public class RegisterActivity extends BaseActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            currentUserId =  mFirebaseAuth.getCurrentUser().getUid();
+                            currentUserId = mFirebaseAuth.getCurrentUser().getUid();
                             setProgressBarVisibility(View.GONE);
+                            sendVerificationEmail();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());

@@ -1,8 +1,5 @@
 apply plugin: 'com.android.application'
 
-//firebase plugin
-apply plugin: 'com.google.gms.google-services'
-
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -23,14 +20,13 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-
     //Design Library for coordinator layout and Toolbars
     compile 'com.android.support:design:25.3.1'
     compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.2'
@@ -38,7 +34,9 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     //Image loader
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-
-    implementation 'com.google.firebase:firebase-auth:9.0.0'
-    implementation 'com.google.firebase:firebase-database:9.0.0'
+    implementation 'com.google.firebase:firebase-auth:11.0.2'
+    implementation 'com.google.firebase:firebase-database:11.0.2'
 }
+//firebase plugin
+apply plugin: 'com.google.gms.google-services'
+
