@@ -94,7 +94,7 @@ public class RegisterActivity extends BaseActivity {
                             // Username should be unique, If same existing username is used, add a random string to the username
                             if (firebaseHelper.checkIfUsernameExist(username, dataSnapshot)) {
                                 Log.d(TAG, "onDataChange: user already exists");
-                                String randomStringToAppend = myRef.push().getKey().substring(3, 10);
+                                String randomStringToAppend = myRef.push().getKey().substring(3, 10); // generates a random string
                                 username += randomStringToAppend;
                             }
                             User userToAdd = new User(user.getUid(), email, 111, username);

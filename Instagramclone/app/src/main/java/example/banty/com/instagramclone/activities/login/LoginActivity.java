@@ -70,7 +70,7 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                        if (currentUser.isEmailVerified()) {
+                        if (currentUser != null && currentUser.isEmailVerified()) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithEmail:success");
