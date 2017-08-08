@@ -79,6 +79,7 @@ public class HomeActivity extends BaseActivity {
                     //User is signed out
                     Log.d(TAG, "onAuthStateChanged: user signed out");
                     launchLoginActivity();
+                    finish();
                 }
             }
         };
@@ -95,7 +96,6 @@ public class HomeActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
         mFirebaseAuth.addAuthStateListener(mAuthListener);
-        checkUserLoginStatus(mFirebaseAuth.getCurrentUser());
     }
 
     @Override
@@ -103,12 +103,6 @@ public class HomeActivity extends BaseActivity {
         super.onStop();
         if (mAuthListener != null) {
             mFirebaseAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
-
-    private void checkUserLoginStatus(FirebaseUser currentUser) {
-        if (currentUser == null) {
-            launchLoginActivity();
         }
     }
 
