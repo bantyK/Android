@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="example.banty.com.instagramclone">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,13 +21,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.search.SearchActivity" />
-        <activity android:name=".activities.share.ShareActivity"/>
-        <activity android:name=".activities.likes.LikesActivity"/>
-        <activity android:name=".activities.profile.ProfileActivity"/>
-        <activity android:name=".activities.BaseActivity"/>
-        <activity android:name=".activities.profile.AccountSettingActivity"/>
-        <activity android:name=".activities.login.LoginActivity"/>
-        <activity android:name=".register.RegisterActivity"/>
+        <activity android:name=".activities.share.ShareActivity" />
+        <activity android:name=".activities.likes.LikesActivity" />
+        <activity android:name=".activities.profile.ProfileActivity" />
+        <activity android:name=".activities.BaseActivity" />
+        <activity android:name=".activities.profile.AccountSettingActivity" />
+        <activity android:name=".activities.login.LoginActivity" />
+        <activity android:name=".register.RegisterActivity" />
+
     </application>
+
 
 </manifest>
