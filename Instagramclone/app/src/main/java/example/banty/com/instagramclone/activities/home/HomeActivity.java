@@ -87,11 +87,6 @@ public class HomeActivity extends BaseActivity {
 
 
 
-    private void launchLoginActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -104,6 +99,11 @@ public class HomeActivity extends BaseActivity {
         if (mAuthListener != null) {
             mFirebaseAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    private void launchLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
 }

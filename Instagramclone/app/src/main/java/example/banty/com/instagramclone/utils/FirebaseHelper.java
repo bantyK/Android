@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseReference;
 import example.banty.com.instagramclone.R;
 import example.banty.com.instagramclone.models.User;
 import example.banty.com.instagramclone.models.UserAccountSettings;
+import example.banty.com.instagramclone.models.UserSetting;
 
 public class FirebaseHelper {
     private static final String TAG = "FirebaseHelper";
@@ -21,9 +22,9 @@ public class FirebaseHelper {
     public boolean checkIfUsernameExist(String username, DataSnapshot dataSnapshot) {
         Log.d(TAG, "checkIfUsernameExist: checking usernames in the database");
 
-        for(DataSnapshot ds : dataSnapshot.child("user").getChildren()) {
+        for (DataSnapshot ds : dataSnapshot.child("user").getChildren()) {
             User user = ds.getValue(User.class);
-            if(username.equals(user.getUsername())) {
+            if (username.equals(user.getUsername())) {
                 //username already exist
                 return true;
             }
@@ -36,10 +37,117 @@ public class FirebaseHelper {
                 .child(user.getUser_id())
                 .setValue(user);
 
-        UserAccountSettings settings = new UserAccountSettings("",user.getUsername(),0,0,0,"",user.getUsername(),"");
+        UserAccountSettings settings = new UserAccountSettings("",
+                user.getUsername(),
+                0,
+                0,
+                0,
+                "",
+                StringMethods.condenseUsername(user.getUsername()),
+                "");
+
         myRef.child(mContext.getString(R.string.firebase_user_account_settings_node))
                 .child(user.getUser_id())
                 .setValue(settings);
+    }
+
+
+    public UserSetting getUserAccountSetting(DataSnapshot dataSnapshot, String userId) {
+        Log.d(TAG, "getUserAccountSetting: retrieving user information from Firebase Database");
+
+        UserAccountSettings userAccountSettings = new UserAccountSettings();
+        User user = new User();
+
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            //getting data from User account setting node
+            if (ds.getKey().equals(mContext.getString(R.string.firebase_user_account_settings_node))) {
+                Log.d(TAG, "getUserAccountSetting: inside user account setting node : " + ds);
+                getUserAccountSettingFromDB(userId, userAccountSettings, ds);
+            }
+
+            //getting data from User Node
+            if(ds.getKey().equals(mContext.getString(R.string.firebase_user_node))) {
+                Log.d(TAG, "getUserAccountSetting: inside user node : " + ds);
+                getUserDataFromDB(userId, user, ds);
+            }
+        }
+
+        return new UserSetting(user,userAccountSettings);
+    }
+
+    private void getUserDataFromDB(String userId, User user, DataSnapshot ds) {
+        user.setUsername(
+                ds.child(userId)
+                .getValue(User.class)
+                .getUsername()
+        );
+
+        user.setEmail(
+                ds.child(userId)
+                .getValue(User.class)
+                .getEmail()
+        );
+
+        user.setPhone_number(
+                ds.child(userId)
+                        .getValue(User.class)
+                        .getPhone_number()
+        );
+
+        user.setUser_id(
+                ds.child(userId)
+                        .getValue(User.class)
+                        .getUser_id()
+        );
+    }
+
+    private void getUserAccountSettingFromDB(String userId, UserAccountSettings userAccountSettings, DataSnapshot ds) {
+        try {
+            userAccountSettings.setDisplay_name(
+                    ds.child(userId)
+                            .getValue(UserAccountSettings.class)
+                            .getDisplay_name()
+            );
+
+            userAccountSettings.setUsername(
+                    ds.child(userId)
+                            .getValue(UserAccountSettings.class)
+                            .getUsername()
+            );
+
+            userAccountSettings.setWebsite(
+                    ds.child(userId)
+                            .getValue(UserAccountSettings.class)
+                            .getWebsite()
+            );
+
+            userAccountSettings.setDescription(
+                    ds.child(userId)
+                            .getValue(UserAccountSettings.class)
+                            .getDescription()
+            );
+
+            userAccountSettings.setProfile_photo(
+                    ds.child(userId)
+                            .getValue(UserAccountSettings.class)
+                            .getProfile_photo()
+            );
+
+            userAccountSettings.setFollowing(
+                    ds.child(userId)
+                            .getValue(UserAccountSettings.class)
+                            .getFollowing()
+            );
+
+            userAccountSettings.setFollowers(
+                    ds.child(userId)
+                            .getValue(UserAccountSettings.class)
+                            .getFollowers()
+            );
+        }catch (NullPointerException npe) {
+            Log.d(TAG, "getUserAccountSetting: Null Pointer exception while reading data from Firebase");
+            Log.e(TAG, npe.getMessage());
+        }
     }
 
 
