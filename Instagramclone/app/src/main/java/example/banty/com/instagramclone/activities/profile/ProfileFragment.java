@@ -75,6 +75,7 @@ public class ProfileFragment extends Fragment {
 
     private void setUpUiElements(View view) {
         displayNameTextView = (TextView) view.findViewById(R.id.display_name);
+        usernameTextView = (TextView) view.findViewById(R.id.profile_name);
         profileInfoTextView = (TextView) view.findViewById(R.id.profile_info);
         descriptionTextView = (TextView) view.findViewById(R.id.profile_description);
         profilePhoto = (CircleImageView) view.findViewById(R.id.profile_image);
@@ -175,16 +176,18 @@ public class ProfileFragment extends Fragment {
 
     private void setWidgetValuesFromDB(UserSetting userSetting) {
 
-        UserAccountSettings userAccountSettings = userSetting.getSettings();
+        UserAccountSettings accountSettings = userSetting.getSettings();
 
-        UniversalImageLoader.setImage(userAccountSettings.getProfile_photo(), profilePhoto, null, "");
-        displayNameTextView.setText(userAccountSettings.getDisplay_name());
-        profileInfoTextView.setText(userAccountSettings.getWebsite());
-        descriptionTextView.setText(userAccountSettings.getDescription());
-        postTextView.setText(String.valueOf(userAccountSettings.getPosts()));
-        followingTextView.setText(String.valueOf(userAccountSettings.getFollowing()));
-        followerTextView.setText(String.valueOf(userAccountSettings.getFollowers()));
+        UniversalImageLoader.setImage(accountSettings.getProfile_photo(), profilePhoto, null, "");
+        displayNameTextView.setText(accountSettings.getDisplay_name());
+        usernameTextView.setText(accountSettings.getUsername());
+        profileInfoTextView.setText(accountSettings.getWebsite());
+        descriptionTextView.setText(accountSettings.getDescription());
+        postTextView.setText(String.valueOf(accountSettings.getPosts()));
+        followingTextView.setText(String.valueOf(accountSettings.getFollowing()));
+        followerTextView.setText(String.valueOf(accountSettings.getFollowers()));
 
+        progressBar.setVisibility(View.GONE);
     }
 
     private void initImageLoader() {

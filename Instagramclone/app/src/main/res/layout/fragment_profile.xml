@@ -28,7 +28,7 @@
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <include layout="@layout/layout_bottom_navigation" />
 
