@@ -1,19 +1,10 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+ <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
-
-        <RelativeLayout
-            android:id="@+id/rel_layout_1"
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <include layout="@layout/snippet_top_profile_bar" />
-
-        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rel_layout_2"

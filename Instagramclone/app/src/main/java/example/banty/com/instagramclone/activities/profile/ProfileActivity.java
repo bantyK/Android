@@ -9,7 +9,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import example.banty.com.instagramclone.utils.UniversalImageLoader;
 public class ProfileActivity extends BaseActivity {
 
     private static final String TAG = "ProfileActivity";
-    private static final int MENU_POSITION = 4;
+
 
     private ProgressBar progressBar;
     private ImageView profilePhoto;
@@ -33,13 +32,26 @@ public class ProfileActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
         setContentView(R.layout.activity_profile);
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom_nav_view_bar);
-        setupBottomNavigationView(bottomNavigationViewEx, MENU_POSITION);
-        initUI();
-        initImageLoader();
-        setUpProfilePhoto();
-        setToolBar();
-        tempGridSetup();
+        init();
+
+//        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom_nav_view_bar);
+//        setupBottomNavigationView(bottomNavigationViewEx, MENU_POSITION);
+//        initUI();
+//        initImageLoader();
+//        setUpProfilePhoto();
+//        setToolBar();
+//        tempGridSetup();
+    }
+
+    private void init() {
+        Log.d(TAG, "init: inflating the profile fragment");
+
+        ProfileFragment profileFragment = new ProfileFragment();
+        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, profileFragment);
+        transaction.addToBackStack(ProfileFragment.class.getSimpleName());
+        transaction.commit();
+
     }
 
     private void setToolBar() {
@@ -80,7 +92,7 @@ public class ProfileActivity extends BaseActivity {
         int imageWidth = gridWidth / NUM_IMAGES_PER_COLUMN;
         gridView.setColumnWidth(imageWidth);
 
-        GridImageAdapter adapter = new GridImageAdapter(this,R.layout.layout_grid_imageview,"",imageURLList);
+        GridImageAdapter adapter = new GridImageAdapter(this, R.layout.layout_grid_imageview, "", imageURLList);
         gridView.setAdapter(adapter);
     }
 
