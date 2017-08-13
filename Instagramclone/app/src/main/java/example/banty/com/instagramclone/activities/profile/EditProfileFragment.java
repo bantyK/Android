@@ -25,6 +25,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import example.banty.com.instagramclone.R;
+import example.banty.com.instagramclone.dialog.ConfirmPasswordDialog;
 import example.banty.com.instagramclone.models.User;
 import example.banty.com.instagramclone.models.UserAccountSettings;
 import example.banty.com.instagramclone.models.UserSetting;
@@ -71,27 +72,22 @@ public class EditProfileFragment extends Fragment {
         final String email = emailEditText.getText().toString();
         final long phoneNumber = Long.parseLong(phoneNumberEditText.getText().toString());
 
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(!mUserSettings.getUser().getUsername().equals(username)) {
-                    //Case 1: User didn't change their username and email
-                    checkIfUserNameExist(username);
-                } else {
-                    //Case 2: User changed his username and email
-                }
+        if (!mUserSettings.getUser().getUsername().equals(username)) {
+            //Case 1: User didn't change their username and email
+            checkIfUserNameExist(username);
+        }
 
+        //Case 2 : If user made a change to his email
+        if (!mUserSettings.getUser().getEmail().equals(email)) {
+            // 1. Re-authenticate
+            //     -- confirm the email and password
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
+            ConfirmPasswordDialog confirmPasswordDialog = new ConfirmPasswordDialog();
+            confirmPasswordDialog.show(getFragmentManager(), getString(R.string.confirm_password_dialog));
+            // 2. Check if email is already registered
+            // 3. Change the email
+        }
     }
 
     /*
@@ -110,15 +106,15 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //query returns a datasnapshot, only if a match is found by the query
-                if(!dataSnapshot.exists()) {
+                if (!dataSnapshot.exists()) {
                     //username does not exist
                     //add the username
                     Toast.makeText(getActivity(), "Adding " + username, Toast.LENGTH_SHORT).show();
                     new FirebaseHelper(getActivity()).updateUsername(username);
                 }
 
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    if(ds.exists()) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds.exists()) {
                         Toast.makeText(getActivity(), username + " already exists", Toast.LENGTH_SHORT).show();
                     }
                 }
