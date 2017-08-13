@@ -18,23 +18,31 @@
                     android:id="@+id/iv_back_arrow"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginStart="10dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_back_arrow"
-                    android:layout_marginEnd="20dp" />
-
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_back_arrow" />
 
 
                 <TextView
-                    android:layout_toRightOf="@id/iv_back_arrow"
                     android:id="@+id/profile_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="5dp"
+                    android:layout_toRightOf="@id/iv_back_arrow"
                     android:text="Options"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/iv_checkmark"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_checkmark" />
 
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -34,8 +36,7 @@ public class EditProfileFragment extends Fragment {
 
     private static final String TAG = "EditProfileFragment";
 
-    private ImageView profilePhoto;
-    private View backButton;
+    private View checkButton;
 
     //UI Wdigets
     private EditText displayNameEditText, usernameEditText, websiteEditText, descriptionEditText, emailEditText, phoneNumberEditText;
@@ -48,12 +49,91 @@ public class EditProfileFragment extends Fragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
 
+    private String userID;
+    private UserSetting mUserSettings;
+
+    private View.OnClickListener saveUserInfoIntoDB = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            saveProfileSetting();
+        }
+    };
+
+    private void saveProfileSetting() {
+        //retrieve the data from widgets
+        //check that the user name is unique
+        //save into DB
+
+        final String displayName = displayNameEditText.getText().toString();
+        final String username = usernameEditText.getText().toString();
+        final String website = websiteEditText.getText().toString();
+        final String description = descriptionEditText.getText().toString();
+        final String email = emailEditText.getText().toString();
+        final long phoneNumber = Long.parseLong(phoneNumberEditText.getText().toString());
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(!mUserSettings.getUser().getUsername().equals(username)) {
+                    //Case 1: User didn't change their username and email
+                    checkIfUserNameExist(username);
+                } else {
+                    //Case 2: User changed his username and email
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    /*
+        Check is @param username exits in DB
+        @Param
+     */
+    private void checkIfUserNameExist(final String username) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        Query query = ref
+                .child(getString(R.string.firebase_user_node))
+                .orderByChild(getString(R.string.field_username))
+                .equalTo(username);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //only if a match is found by the query
+                if(!dataSnapshot.exists()) {
+                    //add the username
+                    Toast.makeText(getActivity(), "Adding " + username, Toast.LENGTH_SHORT).show();
+                    new FirebaseHelper(getActivity()).updateUsername(username);
+                }
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if(ds.exists()) {
+                        Toast.makeText(getActivity(), username + " already exists", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
-
-        profilePhoto = (ImageView) view.findViewById(R.id.profile_photo);
 
         setUpUI(view);
         setFirebaseAuth();
@@ -72,6 +152,9 @@ public class EditProfileFragment extends Fragment {
         descriptionEditText = (EditText) view.findViewById(R.id.description);
         emailEditText = (EditText) view.findViewById(R.id.email);
         phoneNumberEditText = (EditText) view.findViewById(R.id.phone_number);
+
+        checkButton = view.findViewById(R.id.iv_checkmark);
+        checkButton.setOnClickListener(saveUserInfoIntoDB);
     }
 
     private void initImageLoader() {
@@ -79,10 +162,6 @@ public class EditProfileFragment extends Fragment {
         ImageLoader.getInstance().init(universalImageLoader.getImageLoaderConfig());
     }
 
-    private void setProfileImage() {
-        String imageURL = "www.androidcentral.com/sites/androidcentral.com/files/styles/xlarge/public/article_images/2015/01/podcast-event.jpg?itok=zsMimlTM";
-        UniversalImageLoader.setImage(imageURL, profilePhoto, null, "https://");
-    }
 
     public void setBackButton(View view) {
         ImageView backButton = (ImageView) view.findViewById(R.id.iv_back_arrow);
@@ -99,6 +178,7 @@ public class EditProfileFragment extends Fragment {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
+        userID = mFirebaseAuth.getCurrentUser().getUid();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -134,18 +214,19 @@ public class EditProfileFragment extends Fragment {
     }
 
     private void setProfileWidgets(UserSetting userSetting) {
+        mUserSettings = userSetting;
         User user = userSetting.getUser();
         UserAccountSettings userAccountSettings = userSetting.getSettings();
 
         if (user != null && userAccountSettings != null) {
-            usernameEditText.setText(userAccountSettings.getUsername());
+            usernameEditText.setText(user.getUsername());
             displayNameEditText.setText(userAccountSettings.getDisplay_name());
             websiteEditText.setText(userAccountSettings.getWebsite());
             descriptionEditText.setText(userAccountSettings.getDescription());
 
             emailEditText.setText(user.getEmail());
             phoneNumberEditText.setText(String.valueOf(user.getPhone_number()));
-            UniversalImageLoader.setImage(userAccountSettings.getProfile_photo(), profilePhoto, null, "");
+            UniversalImageLoader.setImage(userAccountSettings.getProfile_photo(), displayPicture, null, "");
         }
     }
 

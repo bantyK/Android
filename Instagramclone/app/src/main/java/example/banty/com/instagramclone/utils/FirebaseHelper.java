@@ -3,8 +3,10 @@ package example.banty.com.instagramclone.utils;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import example.banty.com.instagramclone.R;
 import example.banty.com.instagramclone.models.User;
@@ -14,22 +16,20 @@ import example.banty.com.instagramclone.models.UserSetting;
 public class FirebaseHelper {
     private static final String TAG = "FirebaseHelper";
     private Context mContext;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseDatabase mFirebaseDatabase;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference myRef;
+    private String currentUserId;
 
     public FirebaseHelper(Context context) {
         mContext = context;
-    }
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = mFirebaseDatabase.getReference();
+        if(mFirebaseAuth != null && mFirebaseAuth.getCurrentUser() != null)
+            currentUserId = mFirebaseAuth.getCurrentUser().getUid();
 
-    public boolean checkIfUsernameExist(String username, DataSnapshot dataSnapshot) {
-        Log.d(TAG, "checkIfUsernameExist: checking usernames in the database");
-
-        for (DataSnapshot ds : dataSnapshot.child("user").getChildren()) {
-            User user = ds.getValue(User.class);
-            if (username.equals(user.getUsername())) {
-                //username already exist
-                return true;
-            }
-        }
-        return false;
     }
 
     public void addUserToDatabase(User user, DatabaseReference myRef) {
@@ -60,15 +60,18 @@ public class FirebaseHelper {
 
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
             //getting data from User account setting node
-            if (ds.getKey().equals(mContext.getString(R.string.firebase_user_account_settings_node))) {
-                Log.d(TAG, "getUserAccountSetting: inside user account setting node : " + ds);
-                getUserAccountSettingFromDB(userId, userAccountSettings, ds);
-            }
+            if(mContext != null) {
+                if (ds.getKey().equals(mContext.getString(R.string.firebase_user_account_settings_node))) {
+                    Log.d(TAG, "getUserAccountSetting: inside user account setting node : " + ds);
+                    getUserAccountSettingFromDB(userId, userAccountSettings, ds);
+                }
 
-            //getting data from User Node
-            if(ds.getKey().equals(mContext.getString(R.string.firebase_user_node))) {
-                Log.d(TAG, "getUserAccountSetting: inside user node : " + ds);
-                getUserDataFromDB(userId, user, ds);
+
+                //getting data from User Node
+                if (ds.getKey().equals(mContext.getString(R.string.firebase_user_node))) {
+                    Log.d(TAG, "getUserAccountSetting: inside user node : " + ds);
+                    getUserDataFromDB(userId, user, ds);
+                }
             }
         }
 
@@ -76,29 +79,31 @@ public class FirebaseHelper {
     }
 
     private void getUserDataFromDB(String userId, User user, DataSnapshot ds) {
-        user.setUsername(
-                ds.child(userId)
-                .getValue(User.class)
-                .getUsername()
-        );
+        if(userId != null) {
+            user.setUsername(
+                    ds.child(userId)
+                            .getValue(User.class)
+                            .getUsername()
+            );
 
-        user.setEmail(
-                ds.child(userId)
-                .getValue(User.class)
-                .getEmail()
-        );
+            user.setEmail(
+                    ds.child(userId)
+                            .getValue(User.class)
+                            .getEmail()
+            );
 
-        user.setPhone_number(
-                ds.child(userId)
-                        .getValue(User.class)
-                        .getPhone_number()
-        );
+            user.setPhone_number(
+                    ds.child(userId)
+                            .getValue(User.class)
+                            .getPhone_number()
+            );
 
-        user.setUser_id(
-                ds.child(userId)
-                        .getValue(User.class)
-                        .getUser_id()
-        );
+            user.setUser_id(
+                    ds.child(userId)
+                            .getValue(User.class)
+                            .getUser_id()
+            );
+        }
     }
 
     private void getUserAccountSettingFromDB(String userId, UserAccountSettings userAccountSettings, DataSnapshot ds) {
@@ -151,4 +156,16 @@ public class FirebaseHelper {
     }
 
 
+    public void updateUsername(String username) {
+        Log.d(TAG, "updateUsername: updating username to :" + username);
+        myRef.child(mContext.getString(R.string.firebase_user_node))
+                .child(currentUserId)
+                .child(mContext.getString(R.string.field_username))
+                .setValue(username);
+
+        myRef.child(mContext.getString(R.string.firebase_user_account_settings_node))
+                .child(currentUserId)
+                .child(mContext.getString(R.string.field_username))
+                .setValue(username);
+    }
 }

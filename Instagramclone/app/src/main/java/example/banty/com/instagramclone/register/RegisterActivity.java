@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import example.banty.com.instagramclone.R;
@@ -65,6 +66,7 @@ public class RegisterActivity extends BaseActivity {
             }
         }
     };
+    private String randomStringToAppend = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,23 +88,13 @@ public class RegisterActivity extends BaseActivity {
             public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
                 if (mFirebaseAuth.getCurrentUser() != null) {
                     //User is signed in
-                    final FirebaseUser user = firebaseAuth.getCurrentUser();
-                    Log.d(TAG, "onAuthStateChanged: current user id = " + user.getUid());
+
                     myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             // Username should be unique, If same existing username is used, add a random string to the username
-                            if (firebaseHelper.checkIfUsernameExist(username, dataSnapshot)) {
-                                Log.d(TAG, "onDataChange: user already exists");
-                                String randomStringToAppend = myRef.push().getKey().substring(3, 10); // generates a random string
-                                username += randomStringToAppend;
-                            }
-                            User userToAdd = new User(user.getUid(), email, 111, username);
-                            firebaseHelper.addUserToDatabase(userToAdd, myRef);
-                            Toast.makeText(RegisterActivity.this, "Account created", Toast.LENGTH_SHORT).show();
+                            checkIfUserNameExist(username);
 
-                            //Sign out the user, until the email is verified
-                            mFirebaseAuth.signOut();
                         }
 
                         @Override
@@ -118,6 +110,49 @@ public class RegisterActivity extends BaseActivity {
                 }
             }
         };
+    }
+
+    /*
+       Check is @param username exits in DB
+       @Param
+    */
+    private void checkIfUserNameExist(final String username) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        //running a query for usernames in the DB
+        Query query = ref
+                .child(getString(R.string.firebase_user_node))
+                .orderByChild(getString(R.string.field_username))
+                .equalTo(username);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if(ds.exists()) {
+                        Toast.makeText(RegisterActivity.this, username + " already exists", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onDataChange: user already exists");
+                        // generates a random string
+                        randomStringToAppend = myRef.push().getKey().substring(3, 10);
+                    }
+                }
+
+                String mUsername = username + randomStringToAppend;
+                final FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                User userToAdd = new User(user.getUid(), email, 111, mUsername);
+                firebaseHelper.addUserToDatabase(userToAdd, myRef);
+                Toast.makeText(RegisterActivity.this, "Account created", Toast.LENGTH_SHORT).show();
+
+                //Sign out the user, until the email is verified
+                mFirebaseAuth.signOut();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private void sendVerificationEmail() {
