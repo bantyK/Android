@@ -118,7 +118,7 @@ public class RegisterActivity extends BaseActivity {
     */
     private void checkIfUserNameExist(final String username) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        //running a query for usernames in the DB
+        //running a query for getting all the usernames from the DB
         Query query = ref
                 .child(getString(R.string.firebase_user_node))
                 .orderByChild(getString(R.string.field_username))
@@ -128,6 +128,7 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                //return the data snapshot if query returns any data
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     if(ds.exists()) {
                         Toast.makeText(RegisterActivity.this, username + " already exists", Toast.LENGTH_SHORT).show();
@@ -137,6 +138,7 @@ public class RegisterActivity extends BaseActivity {
                     }
                 }
 
+                //append the random string to the username to the username
                 String mUsername = username + randomStringToAppend;
                 final FirebaseUser user = mFirebaseAuth.getCurrentUser();
                 User userToAdd = new User(user.getUid(), email, 111, mUsername);

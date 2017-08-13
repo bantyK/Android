@@ -66,7 +66,6 @@ public class FirebaseHelper {
                     getUserAccountSettingFromDB(userId, userAccountSettings, ds);
                 }
 
-
                 //getting data from User Node
                 if (ds.getKey().equals(mContext.getString(R.string.firebase_user_node))) {
                     Log.d(TAG, "getUserAccountSetting: inside user node : " + ds);

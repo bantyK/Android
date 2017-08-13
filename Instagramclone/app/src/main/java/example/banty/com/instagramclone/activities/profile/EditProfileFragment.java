@@ -96,10 +96,11 @@ public class EditProfileFragment extends Fragment {
 
     /*
         Check is @param username exits in DB
-        @Param
+        @param username
      */
     private void checkIfUserNameExist(final String username) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        //query to get all the usernames from the DB
         Query query = ref
                 .child(getString(R.string.firebase_user_node))
                 .orderByChild(getString(R.string.field_username))
@@ -108,8 +109,9 @@ public class EditProfileFragment extends Fragment {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //only if a match is found by the query
+                //query returns a datasnapshot, only if a match is found by the query
                 if(!dataSnapshot.exists()) {
+                    //username does not exist
                     //add the username
                     Toast.makeText(getActivity(), "Adding " + username, Toast.LENGTH_SHORT).show();
                     new FirebaseHelper(getActivity()).updateUsername(username);
