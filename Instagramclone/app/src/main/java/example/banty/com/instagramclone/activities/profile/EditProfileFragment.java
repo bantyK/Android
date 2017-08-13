@@ -33,7 +33,7 @@ import example.banty.com.instagramclone.utils.FirebaseHelper;
 import example.banty.com.instagramclone.utils.UniversalImageLoader;
 
 
-public class EditProfileFragment extends Fragment {
+public class EditProfileFragment extends Fragment implements ConfirmPasswordDialog.OnConfirmPasswordListener {
 
     private static final String TAG = "EditProfileFragment";
 
@@ -83,8 +83,10 @@ public class EditProfileFragment extends Fragment {
             // 1. Re-authenticate
             //     -- confirm the email and password
 
+            //capturing the user password
             ConfirmPasswordDialog confirmPasswordDialog = new ConfirmPasswordDialog();
             confirmPasswordDialog.show(getFragmentManager(), getString(R.string.confirm_password_dialog));
+            confirmPasswordDialog.setTargetFragment(EditProfileFragment.this, 1);
             // 2. Check if email is already registered
             // 3. Change the email
         }
@@ -241,5 +243,11 @@ public class EditProfileFragment extends Fragment {
         if (mAuthListener != null) {
             mFirebaseAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    @Override
+    public void onConfirmPassword(String password) {
+        Log.d(TAG, "onConfirmPassword: got the password : " + password);
+
     }
 }
