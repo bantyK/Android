@@ -6,4 +6,8 @@
     <string name="firebase_user_node">user</string>
     <string name="firebase_user_account_settings_node">user_account_settings</string>
     <string name="no_network">No network connectivity</string>
+
+    <string name="calling_activity">calling_activity</string>
+    <string name="profile_activity">profile_activity</string>
+
 </resources>

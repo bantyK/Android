@@ -45,7 +45,7 @@ public class ProfileFragment extends Fragment {
     private static final int MENU_POSITION = 4;
 
     private TextView postTextView, followerTextView, followingTextView, displayNameTextView,
-            usernameTextView, profileInfoTextView, descriptionTextView;
+            usernameTextView, profileInfoTextView, descriptionTextView, editProfileTextView;
     private ProgressBar progressBar;
     private CircleImageView profilePhoto;
     private GridView gridView;
@@ -59,6 +59,18 @@ public class ProfileFragment extends Fragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private String userId;
+    private View.OnClickListener editProfileClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            launchEditProfileFragment();
+        }
+    };
+
+    private void launchEditProfileFragment() {
+        Intent intent = new Intent(getActivity(), AccountSettingActivity.class);
+        intent.putExtra(getString(R.string.calling_activity), getString(R.string.profile_activity));
+        startActivity(intent);
+    }
 
 
     @Nullable
@@ -82,6 +94,9 @@ public class ProfileFragment extends Fragment {
         postTextView = (TextView) view.findViewById(R.id.tv_posts);
         followerTextView = (TextView) view.findViewById(R.id.tv_followers);
         followingTextView = (TextView) view.findViewById(R.id.tv_following);
+        editProfileTextView = (TextView) view.findViewById(R.id.text_edit_profile);
+
+        editProfileTextView.setOnClickListener(editProfileClicked);
 
         progressBar = (ProgressBar) view.findViewById(R.id.profile_progress_bar);
         gridView = (GridView) view.findViewById(R.id.grid_image_view);

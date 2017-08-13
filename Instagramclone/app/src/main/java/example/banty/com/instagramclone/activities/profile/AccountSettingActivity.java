@@ -1,5 +1,6 @@
 package example.banty.com.instagramclone.activities.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -45,6 +46,17 @@ public class AccountSettingActivity extends BaseActivity {
 
         setUpSettingList();
         setUpFragments();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = getIntent();
+        if(intent.hasExtra(getString(R.string.calling_activity))){
+            if(intent.getStringExtra(getString(R.string.calling_activity)).equals(getString(R.string.profile_activity))) {
+                setViewPager(pagerAdapter.getFragmentNumberFromName(getString(R.string.edit_profile)));
+            }
+        }
     }
 
     private void setUpSettingList() {
