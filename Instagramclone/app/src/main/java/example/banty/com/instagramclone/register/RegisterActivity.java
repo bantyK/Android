@@ -114,7 +114,7 @@ public class RegisterActivity extends BaseActivity {
 
     /*
        Check is @param username exits in DB
-       @Param
+       @Param username
     */
     private void checkIfUserNameExist(final String username) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
