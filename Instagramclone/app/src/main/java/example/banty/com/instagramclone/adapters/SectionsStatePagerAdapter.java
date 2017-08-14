@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/*
+* To be used when number of fragments are large
+* */
 public class SectionsStatePagerAdapter extends FragmentStatePagerAdapter{
 
     private static final String TAG = "SectionsStatePagerAdapt";

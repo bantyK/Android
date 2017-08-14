@@ -7,6 +7,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+* To be used when number of fragments are small
+* */
+
 public class SectionsPageAdapter extends FragmentPagerAdapter {
 
     private static final String TAG = "SectionsPageAdapter";
