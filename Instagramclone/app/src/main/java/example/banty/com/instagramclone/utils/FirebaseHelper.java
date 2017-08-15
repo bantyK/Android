@@ -201,4 +201,40 @@ public class FirebaseHelper {
             Log.d(TAG, "sendVerificationEmail: user is null");
         }
     }
+
+    public void updateDisplayName(String displayName) {
+        Log.d(TAG, "updateEmail: updating display name to : " + displayName);
+
+        myRef.child(mContext.getString(R.string.firebase_user_account_settings_node))
+                .child(currentUserId)
+                .child(mContext.getString(R.string.field_display_name))
+                .setValue(displayName);
+    }
+
+    public void updateWebsite(String website) {
+        Log.d(TAG, "updateWebsite: updating website to : " + website);
+
+        myRef.child(mContext.getString(R.string.firebase_user_account_settings_node))
+                .child(currentUserId)
+                .child(mContext.getString(R.string.field_website))
+                .setValue(website);
+    }
+
+    public void updateDescription(String description) {
+        Log.d(TAG, "updateDescription: updating description to : " + description);
+
+        myRef.child(mContext.getString(R.string.firebase_user_account_settings_node))
+                .child(currentUserId)
+                .child(mContext.getString(R.string.field_description))
+                .setValue(description);
+    }
+
+    public void updatePhoneNumber(long phoneNumber) {
+        Log.d(TAG, "updatePhoneNumber: updating phone number to : " + phoneNumber);
+
+        myRef.child(mContext.getString(R.string.firebase_user_node))
+                .child(currentUserId)
+                .child(mContext.getString(R.string.field_phone_number))
+                .setValue(phoneNumber);
+    }
 }

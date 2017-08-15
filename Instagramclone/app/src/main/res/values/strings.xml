@@ -3,16 +3,26 @@
 
     <string name="edit_profile">Edit Profile</string>
     <string name="sign_out">Sign Out</string>
-    <string name="firebase_user_node">user</string>
-    <string name="firebase_user_account_settings_node">user_account_settings</string>
     <string name="no_network">No network connectivity</string>
 
+    <!-- activity names -->
     <string name="calling_activity">calling_activity</string>
     <string name="profile_activity">profile_activity</string>
-    <string name="field_username">username</string>
-    <string name="field_email">email</string>
+
 
     <!-- Dialog names-->
     <string name="confirm_password_dialog">ConfirmPasswordDialog</string>
+
+    <!-- Firebase database field names -->
+    <string name="firebase_user_node">user</string>
+    <string name="firebase_user_account_settings_node">user_account_settings</string>
+    <string name="field_username">username</string>
+    <string name="field_email">email</string>
+    <string name="field_display_name">display_name</string>
+    <string name="field_website">website</string>
+    <string name="field_description">description</string>
+    <string name="field_phone_number">phone_number</string>
+
+
 
 </resources>

@@ -57,6 +57,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
 
     private String userID;
     private UserSetting mUserSettings;
+    private FirebaseHelper firebaseHelper;
 
     private View.OnClickListener saveUserInfoIntoDB = new View.OnClickListener() {
         @Override
@@ -78,23 +79,65 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         final long phoneNumber = Long.parseLong(phoneNumberEditText.getText().toString());
 
 
+        //Case 1: User changed their username
         if (!mUserSettings.getUser().getUsername().equals(username)) {
-            //Case 1: User didn't change their username and email
             checkIfUserNameExist(username);
         }
 
-        //Case 2 : If user made a change to his email
+        //If user made a change to his email
+        changeEmail(email);
+
+        // If user has changed his/her display name
+        changeDisplayName(displayName);
+
+        // If user has changed his/her website name
+        changeWebsite(website);
+
+        //If user has changed his/her description
+        changeDescription(description);
+
+        //If user has changed his/her phone number
+        changePhoneNumber(phoneNumber);
+    }
+
+    private void changePhoneNumber(long phoneNumber) {
+        if(mUserSettings.getUser().getPhone_number() != phoneNumber) {
+            firebaseHelper.updatePhoneNumber(phoneNumber);
+        }
+    }
+
+    private void changeDescription(String description) {
+        if(!mUserSettings.getSettings().getDescription().equals(description)) {
+            firebaseHelper.updateDescription(description);
+        }
+    }
+
+    private void changeWebsite(String website) {
+        if(!mUserSettings.getSettings().getWebsite().equals(website)) {
+            firebaseHelper.updateWebsite(website);
+        }
+    }
+
+    private void changeEmail(String email) {
         if (!mUserSettings.getUser().getEmail().equals(email)) {
             // 1. Re-authenticate
             //     -- confirm the email and password
 
-            //capturing the user password
+            // 2. Check if email is already registered
+
+            // 3. Change the email (All 3 steps are performed in onConfirmPassword())
+
+            //capturing the user password from the ConfirmPasswordFragment
             ConfirmPasswordDialog confirmPasswordDialog = new ConfirmPasswordDialog();
             confirmPasswordDialog.show(getFragmentManager(), getString(R.string.confirm_password_dialog));
             confirmPasswordDialog.setTargetFragment(EditProfileFragment.this, 1);
-            // 2. Check if email is already registered
+        }
+    }
 
-            // 3. Change the email
+    private void changeDisplayName(String displayName) {
+        if(!mUserSettings.getSettings().getDisplay_name().equals(displayName)) {
+            //user has changed the display name
+            firebaseHelper.updateDisplayName(displayName);
         }
     }
 
@@ -185,7 +228,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
         userID = mFirebaseAuth.getCurrentUser().getUid();
-
+        firebaseHelper = new FirebaseHelper(getContext());
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -193,12 +236,9 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
                 if (user != null) {
                     //User is signed in
                     Log.d(TAG, "onAuthStateChanged: user signed in");
-
-
                 } else {
                     //User is signed out
                     Log.d(TAG, "onAuthStateChanged: user signed out");
-
                 }
             }
         };
@@ -207,7 +247,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //retrieve user information from database
-                if(mFirebaseAuth.getCurrentUser() != null) {
+                if (mFirebaseAuth.getCurrentUser() != null) {
                     String userId = mFirebaseAuth.getCurrentUser().getUid();
                     setProfileWidgets(new FirebaseHelper(getContext()).getUserAccountSetting(dataSnapshot, userId));
                     //retrieve images for user
@@ -258,25 +298,22 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         Log.d(TAG, "onConfirmPassword: got the password : " + password);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Get auth credentials from the user for re-authentication. The example below shows
-        // email and password credentials but there are multiple possible providers,
-        // such as GoogleAuthProvider or FacebookAuthProvider.
-                AuthCredential credential = EmailAuthProvider
-                        .getCredential(mFirebaseAuth.getCurrentUser().getEmail(), password);
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(mFirebaseAuth.getCurrentUser().getEmail(), password);
 
         // Prompt the user to re-provide their sign-in credentials
-                user.reauthenticate(credential)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()) {
-                                    Log.d(TAG, "onComplete: User re-authenticated.");
-                                    checkIfEmailAlreadyExist(emailEditText.getText().toString().trim());
-                                } else {
-                                    Log.d(TAG, "onComplete: User re-authenticated failed.");
-                                }
-                            }
-                        });
+        user.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "onComplete: User re-authenticated.");
+                            checkIfEmailAlreadyExist(emailEditText.getText().toString().trim());
+                        } else {
+                            Log.d(TAG, "onComplete: User re-authenticated failed.");
+                        }
+                    }
+                });
 
     }
 
@@ -285,7 +322,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         mFirebaseAuth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
             @Override
             public void onComplete(@NonNull Task<ProviderQueryResult> task) {
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     //email already exist
                     try {
                         if (task.getResult().getProviders().size() == 1) {
@@ -296,7 +333,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
                             Log.d(TAG, "onComplete: updating user's email");
                             updateUserEmail(email);
                         }
-                    }catch(Exception e) {
+                    } catch (Exception e) {
                         Log.e(TAG, "onComplete: Exception : " + e.getMessage());
                     }
                 }
@@ -310,7 +347,6 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
     private void updateUserEmail(final String email) {
         Log.d(TAG, "updateUserEmail: updating email to : " + email);
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
-        final FirebaseHelper firebaseHelper = new FirebaseHelper(getContext());
         user.updateEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
