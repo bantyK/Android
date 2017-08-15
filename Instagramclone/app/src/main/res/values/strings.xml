@@ -23,6 +23,8 @@
     <string name="field_description">description</string>
     <string name="field_phone_number">phone_number</string>
 
-
+    <string name="gallary">GALLARY</string>
+    <string name="photo">PHOTO</string>
+    <string name="open_camera">Open Camera</string>
 
 </resources>
