@@ -46,7 +46,7 @@ public class ShareActivity extends BaseActivity {
     }
 
     //returns true if all the permissions are granted
-    private boolean checkPermissionsArray(String[] permissions) {
+    public boolean checkPermissionsArray(String[] permissions) {
         Log.d(TAG, "checkPermissionsArray: checking permissions array");
 
         for(String permission : permissions) {
@@ -58,7 +58,7 @@ public class ShareActivity extends BaseActivity {
     }
 
     //returns true if the @param permission is granted
-    private boolean checkSinglePermission(String permission) {
+    public boolean checkSinglePermission(String permission) {
         Log.d(TAG, "checkSinglePermission: checking permission : " + permission);
 
         int permissionRequest = ActivityCompat.checkSelfPermission(this, permission);
@@ -79,5 +79,12 @@ public class ShareActivity extends BaseActivity {
 
         tabLayout.getTabAt(0).setText(getString(R.string.gallary));
         tabLayout.getTabAt(1).setText(getString(R.string.photo));
+    }
+
+    //return the current tab number
+    //0 = Gallary Fragment
+    //1 = Photo Fragment
+    public int getCurrentItem() {
+        return viewPager.getCurrentItem();
     }
 }
