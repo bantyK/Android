@@ -1,9 +1,14 @@
 package example.banty.com.instagramclone.utils;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -12,6 +17,7 @@ import example.banty.com.instagramclone.R;
 import example.banty.com.instagramclone.models.User;
 import example.banty.com.instagramclone.models.UserAccountSettings;
 import example.banty.com.instagramclone.models.UserSetting;
+import example.banty.com.instagramclone.register.RegisterActivity;
 
 public class FirebaseHelper {
     private static final String TAG = "FirebaseHelper";
@@ -166,5 +172,33 @@ public class FirebaseHelper {
                 .child(currentUserId)
                 .child(mContext.getString(R.string.field_username))
                 .setValue(username);
+    }
+
+    public void updateEmail(String email) {
+        Log.d(TAG, "updateEmail: updating email to : " + email);
+
+        myRef.child(mContext.getString(R.string.firebase_user_node))
+                .child(currentUserId)
+                .child(mContext.getString(R.string.field_email))
+                .setValue(email);
+    }
+
+    public void sendVerificationEmail() {
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            user.sendEmailVerification()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "Email sent to " + user.getEmail());
+                            } else {
+                                Toast.makeText(mContext, "Couldn't send verification email", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        } else {
+            Log.d(TAG, "sendVerificationEmail: user is null");
+        }
     }
 }

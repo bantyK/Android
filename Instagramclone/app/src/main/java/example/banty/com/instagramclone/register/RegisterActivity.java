@@ -157,25 +157,6 @@ public class RegisterActivity extends BaseActivity {
 
     }
 
-    private void sendVerificationEmail() {
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            user.sendEmailVerification()
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Log.d(TAG, "Email sent to " + user.getEmail());
-                            } else {
-                                Toast.makeText(RegisterActivity.this, "Couldn't send verification email", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        } else {
-            Log.d(TAG, "sendVerificationEmail: user is null");
-        }
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -220,7 +201,7 @@ public class RegisterActivity extends BaseActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             currentUserId = mFirebaseAuth.getCurrentUser().getUid();
                             setProgressBarVisibility(View.GONE);
-                            sendVerificationEmail();
+                            new FirebaseHelper(RegisterActivity.this).sendVerificationEmail();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());

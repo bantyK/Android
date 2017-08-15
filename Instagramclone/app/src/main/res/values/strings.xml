@@ -10,6 +10,7 @@
     <string name="calling_activity">calling_activity</string>
     <string name="profile_activity">profile_activity</string>
     <string name="field_username">username</string>
+    <string name="field_email">email</string>
 
     <!-- Dialog names-->
     <string name="confirm_password_dialog">ConfirmPasswordDialog</string>

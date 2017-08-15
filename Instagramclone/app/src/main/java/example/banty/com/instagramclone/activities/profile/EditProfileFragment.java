@@ -13,8 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.ProviderQueryResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -88,6 +93,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
             confirmPasswordDialog.show(getFragmentManager(), getString(R.string.confirm_password_dialog));
             confirmPasswordDialog.setTargetFragment(EditProfileFragment.this, 1);
             // 2. Check if email is already registered
+
             // 3. Change the email
         }
     }
@@ -201,9 +207,11 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //retrieve user information from database
-                String userId = mFirebaseAuth.getCurrentUser().getUid();
-                setProfileWidgets(new FirebaseHelper(getContext()).getUserAccountSetting(dataSnapshot, userId));
-                //retrieve images for user
+                if(mFirebaseAuth.getCurrentUser() != null) {
+                    String userId = mFirebaseAuth.getCurrentUser().getUid();
+                    setProfileWidgets(new FirebaseHelper(getContext()).getUserAccountSetting(dataSnapshot, userId));
+                    //retrieve images for user
+                }
             }
 
             @Override
@@ -248,7 +256,78 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
     @Override
     public void onConfirmPassword(String password) {
         Log.d(TAG, "onConfirmPassword: got the password : " + password);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+        // Get auth credentials from the user for re-authentication. The example below shows
+        // email and password credentials but there are multiple possible providers,
+        // such as GoogleAuthProvider or FacebookAuthProvider.
+                AuthCredential credential = EmailAuthProvider
+                        .getCredential(mFirebaseAuth.getCurrentUser().getEmail(), password);
+
+        // Prompt the user to re-provide their sign-in credentials
+                user.reauthenticate(credential)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()) {
+                                    Log.d(TAG, "onComplete: User re-authenticated.");
+                                    checkIfEmailAlreadyExist(emailEditText.getText().toString().trim());
+                                } else {
+                                    Log.d(TAG, "onComplete: User re-authenticated failed.");
+                                }
+                            }
+                        });
+
+    }
+
+    private void checkIfEmailAlreadyExist(final String email) {
+        //check if user email is not already present in firebase DB
+        mFirebaseAuth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
+            @Override
+            public void onComplete(@NonNull Task<ProviderQueryResult> task) {
+                if(task.isSuccessful()) {
+                    //email already exist
+                    try {
+                        if (task.getResult().getProviders().size() == 1) {
+                            Log.d(TAG, "onComplete: Email already in use");
+                            Toast.makeText(getActivity(), "Email already in use", Toast.LENGTH_SHORT).show();
+                        } else {
+                            //email is available, so update it
+                            Log.d(TAG, "onComplete: updating user's email");
+                            updateUserEmail(email);
+                        }
+                    }catch(Exception e) {
+                        Log.e(TAG, "onComplete: Exception : " + e.getMessage());
+                    }
+                }
+            }
+        });
+    }
+
+    /*
+       Update user's email in the firebase authentication system
+    * */
+    private void updateUserEmail(final String email) {
+        Log.d(TAG, "updateUserEmail: updating email to : " + email);
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        final FirebaseHelper firebaseHelper = new FirebaseHelper(getContext());
+        user.updateEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User email address updated.");
+                            Toast.makeText(getActivity(), "Email successfully updated", Toast.LENGTH_SHORT).show();
+                            //send the verification email to user's new email
+                            firebaseHelper.sendVerificationEmail();
+                            //update the user's email in the firebase DB also
+                            firebaseHelper.updateEmail(email);
+                            //signout the user so that user can sign in again with new email
+                            mFirebaseAuth.signOut();
+
+                        }
+                    }
+                });
     }
 }
 
