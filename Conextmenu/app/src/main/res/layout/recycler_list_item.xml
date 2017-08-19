@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/parent_layout"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:id="@+id/list_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/image"
+        android:text="Iron man"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:id="@+id/lin_layout_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/list_title"
+        android:layout_alignStart="@id/list_title"
+        android:layout_below="@id/list_title"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/image"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Franchise : " />
+
+        <TextView
+            android:id="@+id/franchise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="Marvel" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lin_layout_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/list_title"
+        android:layout_alignStart="@id/list_title"
+        android:layout_below="@id/lin_layout_1"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/image"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Real name : " />
+
+        <TextView
+            android:id="@+id/real_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="Tony Stark" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lin_layout_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/list_title"
+        android:layout_alignStart="@id/list_title"
+        android:layout_below="@id/lin_layout_2"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/image"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Played By : " />
+
+        <TextView
+            android:id="@+id/played_by"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="Robert Downey Jr" />
+
+    </LinearLayout>
+
+</RelativeLayout>
