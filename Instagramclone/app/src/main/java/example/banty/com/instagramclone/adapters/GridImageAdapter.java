@@ -18,6 +18,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import java.util.ArrayList;
 
 import example.banty.com.instagramclone.R;
+import example.banty.com.instagramclone.utils.UniversalImageLoader;
 import example.banty.com.instagramclone.views.SquareImageView;
 
 public class GridImageAdapter extends ArrayAdapter {
@@ -34,6 +35,8 @@ public class GridImageAdapter extends ArrayAdapter {
         this.layoutResource = resource;
         this.append = append;
         this.imageURLs = urls;
+
+        initImageLoader();
     }
 
     @Nullable
@@ -104,5 +107,10 @@ public class GridImageAdapter extends ArrayAdapter {
         SquareImageView profileImage;
         ProgressBar progressBar;
 
+    }
+
+    private void initImageLoader() {
+        UniversalImageLoader universalImageLoader = new UniversalImageLoader(context);
+        ImageLoader.getInstance().init(universalImageLoader.getImageLoaderConfig());
     }
 }
