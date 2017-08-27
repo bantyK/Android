@@ -30,5 +30,6 @@
 
     <!--Intent extras names-->
     <string name="selected_image">selected_image</string>
+    <string name="share">Share</string>
 
 </resources>

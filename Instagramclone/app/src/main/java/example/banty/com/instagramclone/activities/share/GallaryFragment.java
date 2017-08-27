@@ -45,7 +45,7 @@ public class GallaryFragment extends Fragment {
     private TextView nextText;
 
     private static final int NUM_WIDTH_COLUMNS = 3;
-    private static final String fileAppend = "file:/";
+    private final String fileAppend = "file:/";
 
     private String mSelectedString="";
 
