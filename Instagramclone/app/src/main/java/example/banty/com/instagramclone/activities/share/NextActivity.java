@@ -7,8 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import example.banty.com.instagramclone.R;
+import example.banty.com.instagramclone.utils.FirebaseHelper;
 import example.banty.com.instagramclone.utils.UniversalImageLoader;
 
 /**
@@ -31,17 +34,20 @@ public class NextActivity extends AppCompatActivity {
     private static final String TAG = "NextActivity";
 
     private String imageURLPassed;
+    private int userImageCount = 0;
 
     //Firebase Variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
+    private FirebaseHelper mFirebaseHelper;
 
     //UI Elements
     private ImageView backArrowImage;
     private TextView shareText;
     private ImageView shareImage;
+    private EditText captionEditText;
 
     private final String fileAppend = "file:/";
 
@@ -52,15 +58,17 @@ public class NextActivity extends AppCompatActivity {
         setContentView(R.layout.layout_next_activity);
 
         imageURLPassed = getImageFromIntent();
-        initUIElems();
+        mFirebaseHelper = new FirebaseHelper(this);
+        initUIElems(imageURLPassed);
         setImageOnActivityCreate(imageURLPassed);
         setFirebaseAuth();
     }
 
-    public void initUIElems() {
+    public void initUIElems(final String imageURLPassed) {
         backArrowImage = (ImageView) findViewById(R.id.iv_back_arrow);
         shareText = (TextView) findViewById(R.id.tv_share);
         shareImage = (ImageView) findViewById(R.id.image_share);
+        captionEditText = (EditText) findViewById(R.id.caption);
 
         //back image click listener
         backArrowImage.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +84,9 @@ public class NextActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: upload image into firebase database");
+                String caption = captionEditText.getText().toString();
+                Toast.makeText(NextActivity.this, "Uploading your photo", Toast.LENGTH_SHORT).show();
+                mFirebaseHelper.uploadPhoto(getString(R.string.new_photo), caption, userImageCount, imageURLPassed);
             }
         });
 
@@ -97,6 +108,7 @@ public class NextActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -114,6 +126,9 @@ public class NextActivity extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                userImageCount = mFirebaseHelper.getUserImageCount(dataSnapshot);
+                Log.d(TAG, "onDataChange: image count : " + userImageCount);
 
             }
 
@@ -154,4 +169,5 @@ public class NextActivity extends AppCompatActivity {
          */
 
     }
+
 }

@@ -12,4 +12,7 @@ public class FilePaths {
     public static String CAMERA_DIR = ROOT_DIR + "/DCIM/Camera";
     public static String PICTURES = ROOT_DIR + "/Pictures";
     public static String SCREENSHOTS = ROOT_DIR + "/DCIM/Screenshots";
+
+    //Firebase Storage path
+    public static final String FIREBASE_IMAGE_STORAGE = "photos/users/";
 }

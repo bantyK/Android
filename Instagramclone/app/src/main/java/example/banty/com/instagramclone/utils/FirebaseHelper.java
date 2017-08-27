@@ -1,17 +1,25 @@
 package example.banty.com.instagramclone.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import example.banty.com.instagramclone.R;
 import example.banty.com.instagramclone.models.User;
@@ -26,14 +34,19 @@ public class FirebaseHelper {
     private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myRef;
+    private StorageReference mStorageReference;
+
     private String currentUserId;
+    private double mPhotoUploadProgress = 0;
 
     public FirebaseHelper(Context context) {
         mContext = context;
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
-        if(mFirebaseAuth != null && mFirebaseAuth.getCurrentUser() != null)
+        mStorageReference = FirebaseStorage.getInstance().getReference();
+
+        if (mFirebaseAuth != null && mFirebaseAuth.getCurrentUser() != null)
             currentUserId = mFirebaseAuth.getCurrentUser().getUid();
 
     }
@@ -66,7 +79,7 @@ public class FirebaseHelper {
 
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
             //getting data from User account setting node
-            if(mContext != null) {
+            if (mContext != null) {
                 if (ds.getKey().equals(mContext.getString(R.string.firebase_user_account_settings_node))) {
                     Log.d(TAG, "getUserAccountSetting: inside user account setting node : " + ds);
                     getUserAccountSettingFromDB(userId, userAccountSettings, ds);
@@ -80,11 +93,11 @@ public class FirebaseHelper {
             }
         }
 
-        return new UserSetting(user,userAccountSettings);
+        return new UserSetting(user, userAccountSettings);
     }
 
     private void getUserDataFromDB(String userId, User user, DataSnapshot ds) {
-        if(userId != null) {
+        if (userId != null) {
             user.setUsername(
                     ds.child(userId)
                             .getValue(User.class)
@@ -154,7 +167,7 @@ public class FirebaseHelper {
                             .getValue(UserAccountSettings.class)
                             .getFollowers()
             );
-        }catch (NullPointerException npe) {
+        } catch (NullPointerException npe) {
             Log.d(TAG, "getUserAccountSetting: Null Pointer exception while reading data from Firebase");
             Log.e(TAG, npe.getMessage());
         }
@@ -236,5 +249,69 @@ public class FirebaseHelper {
                 .child(currentUserId)
                 .child(mContext.getString(R.string.field_phone_number))
                 .setValue(phoneNumber);
+    }
+
+    public int getUserImageCount(DataSnapshot dataSnapshot) {
+        int count = 0;
+        for (DataSnapshot ds : dataSnapshot.
+                child(mContext.getString(R.string.user_photo_node))
+                .child(mFirebaseAuth.getCurrentUser().getUid())
+                .getChildren()) {
+
+            count += 1;
+
+        }
+        return count;
+    }
+
+    public void uploadPhoto(String photoType, String caption, int count, String imageURL) {
+        if (photoType.equalsIgnoreCase(mContext.getString(R.string.new_photo))) {
+            //uploading an image into firebase database
+            Log.d(TAG, "uploadPhoto: uploading a new photo");
+            String uid = mFirebaseAuth.getCurrentUser().getUid();
+            //This create a path where image is going to get stored in firebase storage
+            String imagePath = FilePaths.FIREBASE_IMAGE_STORAGE + uid + "/photo" + (count + 1);
+            StorageReference storageReference = mStorageReference.child(imagePath);
+
+            Bitmap bitmap = ImageUtils.getBitmap(imageURL);
+            byte[] bytes = ImageUtils.getByteFromBitmap(bitmap, 100);
+            UploadTask uploadTask = null;
+            uploadTask = storageReference.putBytes(bytes);
+
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Uri firebaseUrl = taskSnapshot.getDownloadUrl();
+                    Toast.makeText(mContext, "Photo sucessfully uploaded", Toast.LENGTH_SHORT).show();
+
+                    //add the new photo to photo node and user_photos node
+
+                    //navigate to the main feed so that user can see their newly uploaded photo
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "onFailure: photo upload failed : " + e.getMessage());
+                    Toast.makeText(mContext, "Photo upload failed", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                    if (progress - 15 > mPhotoUploadProgress) {
+                        //show the toast only when the new progress is 15 units higher than the old progress
+                        Toast.makeText(mContext, "Photo upload progress : " + String.format("%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
+                        mPhotoUploadProgress = progress;
+                    }
+
+                    Log.d(TAG, "onProgress: upload progress : " + progress);
+                }
+            });
+
+        } else if (photoType.equalsIgnoreCase(mContext.getString(R.string.new_profile_photo))) {
+            //uploading a new profile photo
+            Log.d(TAG, "uploadPhoto: uploading a new profile photo");
+        }
     }
 }

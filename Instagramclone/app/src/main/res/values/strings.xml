@@ -16,6 +16,8 @@
     <!-- Firebase database field names -->
     <string name="firebase_user_node">user</string>
     <string name="firebase_user_account_settings_node">user_account_settings</string>
+    <string name="user_photo_node">user_photos</string>
+    <string name="photos">photos</string>
     <string name="field_username">username</string>
     <string name="field_email">email</string>
     <string name="field_display_name">display_name</string>
@@ -31,5 +33,8 @@
     <!--Intent extras names-->
     <string name="selected_image">selected_image</string>
     <string name="share">Share</string>
+
+    <string name="new_photo">new_photo</string>
+    <string name="new_profile_photo">new_profile_photo</string>
 
 </resources>
