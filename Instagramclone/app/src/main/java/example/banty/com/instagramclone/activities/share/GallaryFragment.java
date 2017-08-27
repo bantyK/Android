@@ -1,5 +1,6 @@
 package example.banty.com.instagramclone.activities.share;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -46,6 +47,8 @@ public class GallaryFragment extends Fragment {
     private static final int NUM_WIDTH_COLUMNS = 3;
     private static final String fileAppend = "file:/";
 
+    private String mSelectedString="";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,6 +80,9 @@ public class GallaryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: navigating to final share screen");
+                Intent intent = new Intent(getActivity(), NextActivity.class);
+                intent.putExtra(getString(R.string.selected_image), mSelectedString);
+                startActivity(intent);
             }
         });
     }
@@ -150,16 +156,23 @@ public class GallaryFragment extends Fragment {
         gridview.setAdapter(gridImageAdapter);
 
         //set the first image as default image when the fragment loads
-        if(imageURLs.size() > 0)
-            setImageView(imageURLs.get(0),fileAppend);
+        if(imageURLs.size() > 0) {
+            String firstImageURL = imageURLs.get(0);
+            setImageView(firstImageURL, fileAppend);
+            mSelectedString = firstImageURL;
+        }
+
 
         //change the image on the image view when any image is clicked from the gridview
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "onItemClick: selected an image");
-                if(imageURLs.size() > 0)
-                    setImageView(imageURLs.get(position), fileAppend);
+                if(imageURLs.size() > 0) {
+                    String selectedImageURL = imageURLs.get(position);
+                    setImageView(selectedImageURL, fileAppend);
+                    mSelectedString = selectedImageURL;
+                }
             }
         });
     }

@@ -28,4 +28,7 @@
     <string name="open_camera">Open Camera</string>
     <string name="next">Next</string>
 
+    <!--Intent extras names-->
+    <string name="selected_image">selected_image</string>
+
 </resources>

@@ -31,6 +31,7 @@
         <activity android:name=".activities.profile.AccountSettingActivity" />
         <activity android:name=".activities.login.LoginActivity" />
         <activity android:name=".register.RegisterActivity" />
+        <activity android:name=".activities.share.NextActivity" />
 
     </application>
 
