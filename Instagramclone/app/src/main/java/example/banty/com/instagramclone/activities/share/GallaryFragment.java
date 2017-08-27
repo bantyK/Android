@@ -1,9 +1,7 @@
 package example.banty.com.instagramclone.activities.share;
 
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -86,23 +84,39 @@ public class GallaryFragment extends Fragment {
     private ArrayList<String> getDirectoryList() {
         //check for directories /storage/emulated/0/pictures
         ArrayList<String> directories = new ArrayList<>();
-        ArrayList<String> picturesDirectoryPath = FileUtils.getDirectoryPath(FilePaths.PICTURES);
-
-        if (picturesDirectoryPath != null) {
-            directories = picturesDirectoryPath;
+        ArrayList<String> picturesDirectoryPath = new ArrayList<>();
+        if(FileUtils.getDirectoryPath(FilePaths.PICTURES) != null) {
+             picturesDirectoryPath = FileUtils.getDirectoryPath(FilePaths.PICTURES);
         }
 
-        directories.add(FilePaths.CAMERA_DIR);
-        directories.add(FilePaths.SCREENSHOTS);
 
-        return directories;
+        picturesDirectoryPath.add(FilePaths.CAMERA_DIR);
+        picturesDirectoryPath.add(FilePaths.SCREENSHOTS);
 
+        return picturesDirectoryPath;
+
+    }
+
+    private ArrayList<String> getDirectoryNames(ArrayList<String> picturesDirectoryPath) {
+        ArrayList<String> directoryNames = new ArrayList<>();
+
+        for(int i=0;i<picturesDirectoryPath.size();i++) {
+            int index = picturesDirectoryPath.get(i).lastIndexOf("/");
+            String directoryName = picturesDirectoryPath.get(i).substring(index+1);
+            directoryNames.add(directoryName);
+        }
+        return directoryNames;
     }
 
     private void setUpSpinner() {
         final ArrayList<String> directoryList = getDirectoryList();
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_spinner_item, directoryList);
+        final ArrayList<String> directoryNames = getDirectoryNames(directoryList);
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
+                getContext(),
+                android.R.layout.simple_spinner_item,
+                directoryNames);
+
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         directorySpinner.setAdapter(spinnerAdapter);
 
