@@ -42,6 +42,7 @@ dependencies {
 
     //gson
     implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.6.0'
 
     //butter knife
     implementation 'com.jakewharton:butterknife:8.8.1'
