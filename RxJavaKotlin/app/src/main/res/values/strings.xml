@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">RxJava-Kotlin</string>
+    <string name="total_hits">Total hits</string>
+</resources>
