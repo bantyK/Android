@@ -1,6 +1,8 @@
 package com.example.vuclip.rxjava_kotlin
 
+import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Button
@@ -50,7 +52,8 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { result ->
-                            Log.d(TAG, "${result.query.searchinfo.totalhits}")
+                            result.query.search.stream()
+                                    .forEach { search -> Log.d(TAG, search.title) }
                             totalHits.text = "${result.query.searchinfo.totalhits}"
                         },
                         { error -> error.printStackTrace() }
