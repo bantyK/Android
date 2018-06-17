@@ -1,6 +1,7 @@
-package com.banty.quizapp.data.local
+package com.banty.quizapp.data
 
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
 import com.squareup.moshi.Json
 
 /**
@@ -11,6 +12,9 @@ import com.squareup.moshi.Json
  */
 @Entity(tableName = "questions")
 data class Question(
+
+        @PrimaryKey
+        val id : String, // id will be combination of (category + type + difficulty)
 
         @Json(name = "category")
         val category: String? = null,

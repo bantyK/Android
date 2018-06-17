@@ -36,6 +36,7 @@ ext {
     rxJavaAdapterVersion = "2.3.0"
     rxAndroidVersion = "2.0.2"
     rxJava2Version = "2.1.0"
+    gsonVersion = "2.8.5"
 
     //test
     junitVersion = "4.12"
